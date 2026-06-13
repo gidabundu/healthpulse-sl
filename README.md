@@ -202,6 +202,7 @@ If Render shows `Running 'node index.html'`, the service was created with the wr
 3. Set **Build Command** to `npm install`.
 4. Set **Start Command** to `npm start`.
 5. If the service was created incorrectly, delete it and create a new Blueprint deployment from [render.yaml](render.yaml).
+6. If you keep the existing service, manually replace the start command with `npm start` and remove any `node index.html` setting.
 
 ## License
 
