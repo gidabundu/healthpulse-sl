@@ -29,11 +29,21 @@ function setupEventListeners() {
   // Login form
   loginForm.addEventListener('submit', handleLogin);
   
+  // Menu toggle for mobile
+  const menuToggle = document.getElementById('menu-toggle');
+  if (menuToggle) {
+    menuToggle.addEventListener('click', toggleSidebar);
+  }
+  
   // Navigation
   document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', (e) => {
       const section = e.currentTarget.dataset.section;
       navigateTo(section);
+      // Close sidebar on mobile after navigation
+      if (window.innerWidth <= 768) {
+        closeSidebar();
+      }
     });
   });
   
@@ -589,4 +599,19 @@ function formatDate(dateStr) {
 
 function capitalizeFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// Sidebar Toggle Functions
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  if (sidebar) {
+    sidebar.classList.toggle('open');
+  }
+}
+
+function closeSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  if (sidebar) {
+    sidebar.classList.remove('open');
+  }
 }

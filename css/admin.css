@@ -295,6 +295,27 @@ body {
   margin-bottom: 32px;
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--primary);
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s;
+}
+
+.menu-toggle:hover {
+  background: var(--bg-light);
+}
+
 .header h1 {
   font-family: var(--font-display);
   font-size: 2rem;
@@ -661,6 +682,8 @@ body {
 
 .modal-body {
   padding: 24px;
+  max-height: 70vh;
+  overflow-y: auto;
 }
 
 .modal-body .form-group {
@@ -721,10 +744,17 @@ body {
 }
 
 @media (max-width: 768px) {
+  .menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .sidebar {
     width: 100%;
     transform: translateX(-100%);
     transition: transform 0.3s;
+    z-index: 1000;
   }
 
   .sidebar.open {
@@ -741,9 +771,13 @@ body {
   }
 
   .header {
-    flex-direction: column;
+    flex-direction: row;
     gap: 16px;
-    align-items: flex-start;
+    align-items: center;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
   }
 
   .table-container {

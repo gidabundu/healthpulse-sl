@@ -51,7 +51,8 @@ a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fo
   .layout{padding:18px 12px;}
   .main-toolbar{flex-direction:column;align-items:stretch;}
   .search-wrap,.sort-select,.main-toolbar .btn{width:100%;}
-  .sidebar{position:static;top:auto;}
+  .sidebar{position:static;top:auto;margin-bottom:20px;}
+  .filter-tag{display:inline-flex;margin:4px 2px;padding:6px 14px;font-size:.8rem;}
   .articles-grid{grid-template-columns:1fr;}
   .card-meta{gap:10px;align-items:flex-start;flex-direction:column;}
   .healthbot-fab{width:52px;height:52px;bottom:18px;right:18px;}
