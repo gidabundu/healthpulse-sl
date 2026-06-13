@@ -4,6 +4,8 @@ const API_BASE = 'http://localhost:3000/api';
 // State
 let currentAdmin = null;
 let authToken = localStorage.getItem('adminToken');
+let currentEditingArticleId = null;
+let currentArticles = [];
 
 // DOM Elements
 const loginScreen = document.getElementById('login-screen');
@@ -52,20 +54,36 @@ function setupEventListeners() {
   document.getElementById('add-user-btn').addEventListener('click', () => {
     showUserModal();
   });
+
+  // Add Article button
+  document.getElementById('add-article-btn').addEventListener('click', () => {
+    showArticleModal();
+  });
   
   // User form
   document.getElementById('user-form').addEventListener('submit', handleUserSubmit);
+
+  // Article form
+  document.getElementById('article-form').addEventListener('submit', handleArticleSubmit);
   
   // Modal close buttons
   document.querySelectorAll('.modal-close').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.getElementById('user-modal').style.display = 'none';
+      const modal = btn.closest('.modal');
+      if (modal) {
+        closeModal(modal.id);
+      }
     });
   });
   
   // Modal overlay
-  document.querySelector('.modal-overlay').addEventListener('click', () => {
-    document.getElementById('user-modal').style.display = 'none';
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', () => {
+      const modal = overlay.closest('.modal');
+      if (modal) {
+        closeModal(modal.id);
+      }
+    });
   });
 }
 
@@ -279,6 +297,7 @@ async function loadArticles() {
     
     if (response.ok) {
       const articles = await response.json();
+      currentArticles = articles;
       renderArticlesTable(articles);
     }
   } catch (error) {
@@ -374,9 +393,91 @@ function renderUsersTable(users) {
 
 // Show User Modal
 function showUserModal() {
-  document.getElementById('user-modal').style.display = 'flex';
+  openModal('user-modal');
   document.getElementById('user-form').reset();
   document.getElementById('user-modal-title').textContent = 'Add New User';
+}
+
+// Show Article Modal
+function showArticleModal(article = null) {
+  currentEditingArticleId = article ? article.id : null;
+
+  const form = document.getElementById('article-form');
+  form.reset();
+  document.getElementById('article-modal-title').textContent = article ? 'Edit Article' : 'Add New Article';
+  document.getElementById('article-title').value = article?.title || '';
+  document.getElementById('article-topic').value = article?.topic || 'malaria';
+  document.getElementById('article-excerpt').value = article?.excerpt || '';
+  document.getElementById('article-body').value = article?.body || '';
+  document.getElementById('article-author').value = article?.author || '';
+  document.getElementById('article-tags').value = Array.isArray(article?.tags) ? article.tags.join(', ') : (article?.tags || '');
+  document.getElementById('article-date').value = article?.date || new Date().toISOString().split('T')[0];
+  document.getElementById('article-lang').value = article?.lang || 'en';
+
+  openModal('article-modal');
+}
+
+// Open Modal
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = 'flex';
+  }
+}
+
+// Close Modal
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = 'none';
+  }
+  if (modalId === 'article-modal') {
+    currentEditingArticleId = null;
+  }
+}
+
+// Handle Article Submit
+async function handleArticleSubmit(e) {
+  e.preventDefault();
+
+  const formData = new FormData(e.target);
+  const articleData = Object.fromEntries(formData.entries());
+  articleData.tags = articleData.tags
+    ? articleData.tags.split(',').map(tag => tag.trim()).filter(Boolean)
+    : [];
+
+  const btn = e.target.querySelector('button[type="submit"]');
+  const originalLabel = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = currentEditingArticleId ? 'Updating...' : 'Saving...';
+
+  try {
+    const url = currentEditingArticleId
+      ? `${API_BASE}/articles/${currentEditingArticleId}`
+      : `${API_BASE}/articles`;
+    const method = currentEditingArticleId ? 'PUT' : 'POST';
+
+    const response = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(articleData)
+    });
+
+    if (response.ok) {
+      closeModal('article-modal');
+      await loadArticles();
+      await loadDashboardData();
+    } else {
+      const error = await response.json();
+      alert(error.error || 'Failed to save article');
+    }
+  } catch (error) {
+    console.error('Error saving article:', error);
+    alert('Network error. Please try again.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalLabel;
+  }
 }
 
 // Handle User Submit
@@ -440,9 +541,22 @@ async function deleteUser(userId) {
   }
 }
 
-// Edit Article (redirect to main site)
+// Edit Article
 function editArticle(articleId) {
-  window.open(`index.html#edit-${articleId}`, '_blank');
+  const article = currentArticles.find(item => item.id === articleId);
+
+  if (article) {
+    showArticleModal(article);
+    return;
+  }
+
+  fetch(`${API_BASE}/articles/${articleId}`)
+    .then(response => response.ok ? response.json() : Promise.reject(new Error('Article not found')))
+    .then(articleData => showArticleModal(articleData))
+    .catch(error => {
+      console.error('Error loading article for edit:', error);
+      alert('Unable to load article for editing.');
+    });
 }
 
 // Delete Article

@@ -231,6 +231,73 @@
     </main>
   </div>
 
+  <!-- Modal for Add/Edit Article -->
+  <div id="article-modal" class="modal" style="display:none;">
+    <div class="modal-overlay"></div>
+    <div class="modal-content article-modal-content">
+      <div class="modal-header">
+        <h3 id="article-modal-title">Add New Article</h3>
+        <button class="modal-close">&times;</button>
+      </div>
+      <form id="article-form" class="modal-body">
+        <div class="form-group">
+          <label for="article-title">Title</label>
+          <input type="text" id="article-title" name="title" required/>
+        </div>
+        <div class="form-group">
+          <label for="article-topic">Topic</label>
+          <select id="article-topic" name="topic" required>
+            <option value="malaria">Malaria</option>
+            <option value="maternal">Maternal Health</option>
+            <option value="nutrition">Nutrition</option>
+            <option value="water">Water & Sanitation</option>
+            <option value="hiv">HIV/AIDS</option>
+            <option value="vaccination">Vaccination</option>
+            <option value="mental-health">Mental Health</option>
+            <option value="tuberculosis">Tuberculosis</option>
+            <option value="diabetes">Diabetes</option>
+            <option value="hypertension">Hypertension</option>
+            <option value="cholera">Cholera</option>
+            <option value="family-planning">Family Planning</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="article-excerpt">Excerpt</label>
+          <textarea id="article-excerpt" name="excerpt" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="article-body">Body</label>
+          <textarea id="article-body" name="body" rows="8" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="article-author">Author</label>
+          <input type="text" id="article-author" name="author" placeholder="Optional"/>
+        </div>
+        <div class="form-group">
+          <label for="article-tags">Tags</label>
+          <input type="text" id="article-tags" name="tags" placeholder="Comma-separated tags"/>
+        </div>
+        <div class="form-group">
+          <label for="article-date">Date</label>
+          <input type="date" id="article-date" name="date" required/>
+        </div>
+        <div class="form-group">
+          <label for="article-lang">Language</label>
+          <select id="article-lang" name="lang" required>
+            <option value="en">English</option>
+            <option value="kr">Krio</option>
+            <option value="tm">Temne</option>
+            <option value="mn">Mende</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost modal-close">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Article</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Modal for Add/Edit User -->
   <div id="user-modal" class="modal" style="display:none;">
     <div class="modal-overlay"></div>
