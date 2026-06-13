@@ -3,6 +3,7 @@ services:
     name: healthpulse-sl-api
     env: node
     plan: free
+    rootDir: .
     buildCommand: npm install
     startCommand: npm start
     autoDeploy: true

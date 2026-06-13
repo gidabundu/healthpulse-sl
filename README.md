@@ -193,6 +193,16 @@ Copy [`.env.example`](.env.example) for local settings. On Render, `JWT_SECRET` 
 - If you rename the Render service, update the destination in [vercel.json](vercel.json).
 - The backend persists article/admin data only when the Render disk is attached.
 
+### Render troubleshooting
+
+If Render shows `Running 'node index.html'`, the service was created with the wrong type or start command.
+
+1. Make sure the service is a **Web Service**, not a Static Site.
+2. Set **Root Directory** to the repository root, or leave it blank if Render accepts that.
+3. Set **Build Command** to `npm install`.
+4. Set **Start Command** to `npm start`.
+5. If the service was created incorrectly, delete it and create a new Blueprint deployment from [render.yaml](render.yaml).
+
 ## License
 
 MIT License — see [LICENSE](LICENSE) file for details.

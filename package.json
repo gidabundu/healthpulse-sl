@@ -2,7 +2,7 @@
   "name": "healthpulse-sl",
   "version": "1.0.0",
   "description": "Digital Health Awareness System for Sierra Leone — aligned with SDG 3: Good Health & Well-being",
-  "main": "index.html",
+  "main": "server.js",
   "keywords": [
     "health", "SDG3", "sierra-leone", "awareness", "malaria",
     "maternal-health", "nutrition", "HIV", "vaccination", "krio",
