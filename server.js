@@ -17,6 +17,7 @@ app.use(express.static(path.join(__dirname)));
 // File-based database
 const DATA_FILE = process.env.DATA_FILE || path.join(__dirname, 'healthpulse-data.json');
 const FALLBACK_DATA_FILE = path.join('/tmp', 'healthpulse-data.json');
+const SEED_FILE = path.join(__dirname, 'healthpulse-data.json');
 
 // Initialize database file
 let db = {
@@ -29,6 +30,16 @@ if (fs.existsSync(DATA_FILE)) {
     db = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
   } catch (error) {
     console.error('Error reading database file, starting fresh');
+  }
+}
+
+function loadSeedArticles() {
+  try {
+    const seedDb = JSON.parse(fs.readFileSync(SEED_FILE, 'utf8'));
+    return Array.isArray(seedDb.articles) ? seedDb.articles : [];
+  } catch (error) {
+    console.error('Error reading seed article file, falling back to built-in samples');
+    return [];
   }
 }
 
@@ -47,64 +58,17 @@ function saveDb() {
   }
 }
 
-// Insert sample articles if database is empty
-if (db.articles.length === 0) {
-  db.articles = [
-    {
-      id: 'a1',
-      topic: 'malaria',
-      title: 'Understanding Malaria: Causes, Symptoms & Prevention',
-      excerpt: 'Malaria remains one of the leading causes of illness and death in Sierra Leone. Understanding how it spreads is the first step to protection.',
-      body: 'Malaria is caused by Plasmodium parasites transmitted through the bites of infected female Anopheles mosquitoes. Common symptoms include fever, chills, headache, and fatigue. Prevention methods include using insecticide-treated bed nets, indoor residual spraying, and taking antimalarial medication as prescribed. Early diagnosis and treatment are crucial for recovery.',
-      author: 'Dr. A. Kamara',
-      tags: 'prevention,treatment,mosquito,community',
-      date: '2024-08-15',
-      lang: 'en',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    },
-    {
-      id: 'a2',
-      topic: 'maternal',
-      title: 'Safe Motherhood: Antenatal Care in Sierra Leone',
-      excerpt: 'Regular antenatal visits dramatically reduce maternal and infant mortality. Every pregnant woman deserves quality care from the first trimester.',
-      body: 'Antenatal care (ANC) is essential for monitoring the health of both mother and baby during pregnancy. In Sierra Leone, the Free Health Care Initiative provides free ANC services. Key components include blood pressure monitoring, iron supplementation, tetanus vaccination, and malaria prevention. Women should attend at least 8 ANC visits for optimal outcomes.',
-      author: 'Nurse F. Conteh',
-      tags: 'antenatal,pregnancy,newborn,free-healthcare',
-      date: '2024-09-02',
-      lang: 'en',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    },
-    {
-      id: 'a3',
-      topic: 'nutrition',
-      title: 'Fighting Malnutrition: Feeding Your Child for Life',
-      excerpt: 'Stunting and wasting affect millions of children across West Africa. A diverse diet in the first 1,000 days of life changes everything.',
-      body: 'Good nutrition is the foundation of child development. The first 1,000 days from conception to age 2 are critical. Breastfeeding exclusively for the first 6 months provides essential nutrients and antibodies. After 6 months, introduce complementary foods rich in protein, vitamins, and minerals. Community nutrition programs and education can help families make informed dietary choices.',
-      author: 'Nutritionist M. Sesay',
-      tags: 'children,breastfeeding,diet,stunting',
-      date: '2024-07-20',
-      lang: 'en',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    },
-    {
-      id: 'a4',
-      topic: 'water',
-      title: 'Clean Water & Sanitation: A Human Right, Not a Luxury',
-      excerpt: 'Access to safe water prevents diarrhoea, cholera, and typhoid. Hand-washing alone can cut child deaths by up to 45%.',
-      body: 'Clean water and proper sanitation are fundamental to public health. In Sierra Leone, waterborne diseases remain a leading cause of child mortality. Simple practices like boiling drinking water, using latrines, and washing hands with soap can prevent most waterborne illnesses. Community-led total sanitation (CLTS) approaches have shown success in improving hygiene behaviors and reducing disease transmission.',
-      author: 'WASH Officer T. Bangura',
-      tags: 'cholera,handwashing,latrine,water',
-      date: '2024-10-10',
-      lang: 'en',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    }
-  ];
-  saveDb();
-  console.log('Sample articles inserted into database');
+// Ensure the bundled 12-article seed set is present.
+const seedArticles = loadSeedArticles();
+if (seedArticles.length > 0) {
+  const existingIds = new Set(db.articles.map(article => article.id));
+  const missingSeedArticles = seedArticles.filter(article => !existingIds.has(article.id));
+
+  if (missingSeedArticles.length > 0) {
+    db.articles = [...db.articles, ...missingSeedArticles];
+    saveDb();
+    console.log(`Seed articles merged into database (${missingSeedArticles.length} added)`);
+  }
 }
 
 // Insert default admin user if admin_users is empty

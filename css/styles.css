@@ -38,11 +38,24 @@ a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fo
 .hamburger{display:none;background:none;border:none;color:var(--white);cursor:pointer;padding:8px;}
 .hamburger svg{width:24px;height:24px;}
 @media(max-width:768px){
-  .hamburger{display:block;}
-  .topbar-right{display:none;position:absolute;top:64px;left:0;right:0;background:var(--green-deep);flex-direction:column;padding:16px;gap:12px;box-shadow:0 4px 12px rgba(0,0,0,.25);}
+  .topbar{padding:0 14px;min-height:64px;flex-wrap:wrap;align-items:center;}
+  .topbar-brand{min-width:0;gap:10px;}
+  .topbar-title{font-size:1rem;line-height:1.1;}
+  .hamburger{display:block;margin-left:auto;}
+  .topbar-right{display:none;position:absolute;top:64px;left:0;right:0;background:var(--green-deep);flex-direction:column;padding:16px;gap:12px;box-shadow:0 4px 12px rgba(0,0,0,.25);z-index:101;}
   .topbar-right.open{display:flex;}
   .lang-btn{width:100%;text-align:center;padding:10px;}
   .sdg-badge{align-self:center;}
+  .hero{padding:28px 14px 34px;}
+  .hero-stats{gap:14px;}
+  .layout{padding:18px 12px;}
+  .main-toolbar{flex-direction:column;align-items:stretch;}
+  .search-wrap,.sort-select,.main-toolbar .btn{width:100%;}
+  .sidebar{position:static;top:auto;}
+  .articles-grid{grid-template-columns:1fr;}
+  .card-meta{gap:10px;align-items:flex-start;flex-direction:column;}
+  .healthbot-fab{width:52px;height:52px;bottom:18px;right:18px;}
+  .healthbot-panel{width:calc(100vw - 24px);right:12px;bottom:84px;}
 }
 
 /* ── HERO ── */
