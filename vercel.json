@@ -1,5 +1,4 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "builds": [
     {
@@ -22,7 +21,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://healthpulse-sl-api.onrender.com/api/$1"
+      "destination": "https://healthpulse-sl.onrender.com/api/$1"
     },
     {
       "source": "/(.*)",

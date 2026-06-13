@@ -238,7 +238,7 @@ const SEED_ARTICLES=[
 ];
 
 // ── STATE ─────────────────────────────────────────────
-const API_BASE=window.__HEALTHPULSE_API_BASE__||((window.location.protocol==='file:'||window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1')?'http://localhost:3000/api':'/api');
+const API_BASE=window.__HEALTHPULSE_API_BASE__||((window.location.protocol==='file:'||window.location.hostname==='localhost'||window.location.hostname==='127.0.0.1')?'http://localhost:3000/api':'https://healthpulse-sl.onrender.com/api');
 
 async function loadArticles(){
   try{
