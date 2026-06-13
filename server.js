@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'healthpulse-admin-secret-key-2024';
 
 // Middleware
@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
 // File-based database
-const DB_FILE = path.join(__dirname, 'healthpulse-data.json');
+const DATA_FILE = process.env.DATA_FILE || path.join(__dirname, 'healthpulse-data.json');
 
 // Initialize database file
 let db = {
@@ -23,9 +23,9 @@ let db = {
   admin_users: []
 };
 
-if (fs.existsSync(DB_FILE)) {
+if (fs.existsSync(DATA_FILE)) {
   try {
-    db = JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+    db = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
   } catch (error) {
     console.error('Error reading database file, starting fresh');
   }
@@ -33,7 +33,8 @@ if (fs.existsSync(DB_FILE)) {
 
 // Save database to file
 function saveDb() {
-  fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
+  fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
+  fs.writeFileSync(DATA_FILE, JSON.stringify(db, null, 2));
 }
 
 // Insert sample articles if database is empty
@@ -493,5 +494,5 @@ app.get('/api/stats', (req, res) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`HealthPulse SL server running on http://localhost:${PORT}`);
-  console.log(`Database: ${DB_FILE}`);
+  console.log(`Database: ${DATA_FILE}`);
 });

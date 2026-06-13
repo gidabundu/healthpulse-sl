@@ -57,6 +57,9 @@ healthpulse-sl/
 ├── admin.html          # Admin dashboard
 ├── server.js           # Node.js backend with SQLite
 ├── package.json        # Project metadata and dependencies
+├── vercel.json         # Vercel rewrite config for /api -> Render
+├── render.yaml         # Render Blueprint for backend deployment
+├── .env.example        # Local and production environment variables
 ├── css/                # Stylesheets
 ├── js/                 # JavaScript files
 ├── healthpulse-data.json  # Sample data
@@ -155,6 +158,40 @@ railway init
 # Deploy
 railway up
 ```
+
+## Deployment: Vercel + Render
+
+Use Vercel for the static frontend and Render for the Node.js backend.
+
+### 1) Deploy the backend on Render
+
+1. Push the repo to GitHub.
+2. In Render, create a new Blueprint deployment from this repository.
+3. Render will read [render.yaml](render.yaml) and create the `healthpulse-sl-api` service.
+4. After the first deploy, confirm the service URL is `https://healthpulse-sl-api.onrender.com`.
+5. The backend stores JSON data on a persistent disk mounted at `/var/data`.
+
+### 2) Point Vercel at the Render backend
+
+1. Update the destination in [vercel.json](vercel.json) if your Render URL is different.
+2. Deploy the repository to Vercel as a static site.
+3. Vercel will proxy `/api/*` requests to Render, so the frontend can keep using a relative `/api` base.
+
+### 3) Local development
+
+1. Run `npm install`.
+2. Start the backend with `npm start`.
+3. Open `index.html` or `admin.html` locally; the scripts fall back to `http://localhost:3000/api` when running on localhost or from `file://`.
+
+### Environment variables
+
+Copy [`.env.example`](.env.example) for local settings. On Render, `JWT_SECRET` and `DATA_FILE` are set by the Blueprint.
+
+### Notes
+
+- The frontend does not need a build step.
+- If you rename the Render service, update the destination in [vercel.json](vercel.json).
+- The backend persists article/admin data only when the Render disk is attached.
 
 ## License
 

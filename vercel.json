@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://healthpulse-sl-api.onrender.com/api/$1"
+    }
+  ]
+}

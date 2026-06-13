@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: healthpulse-sl-api
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true
+    healthCheckPath: /api/stats
+    disk:
+      name: healthpulse-sl-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATA_FILE
+        value: /var/data/healthpulse-data.json
+      - key: JWT_SECRET
+        generateValue: true
