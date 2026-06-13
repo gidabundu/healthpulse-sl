@@ -16,6 +16,7 @@ app.use(express.static(path.join(__dirname)));
 
 // File-based database
 const DATA_FILE = process.env.DATA_FILE || path.join(__dirname, 'healthpulse-data.json');
+const FALLBACK_DATA_FILE = path.join('/tmp', 'healthpulse-data.json');
 
 // Initialize database file
 let db = {
@@ -33,8 +34,17 @@ if (fs.existsSync(DATA_FILE)) {
 
 // Save database to file
 function saveDb() {
-  fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
-  fs.writeFileSync(DATA_FILE, JSON.stringify(db, null, 2));
+  const payload = JSON.stringify(db, null, 2);
+
+  try {
+    fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
+    fs.writeFileSync(DATA_FILE, payload);
+    return DATA_FILE;
+  } catch (error) {
+    console.warn(`Primary data path unavailable (${DATA_FILE}), falling back to ${FALLBACK_DATA_FILE}`);
+    fs.writeFileSync(FALLBACK_DATA_FILE, payload);
+    return FALLBACK_DATA_FILE;
+  }
 }
 
 // Insert sample articles if database is empty
