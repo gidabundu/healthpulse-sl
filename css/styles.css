@@ -38,6 +38,7 @@ a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fo
 .hamburger{display:none;background:none;border:none;color:var(--white);cursor:pointer;padding:8px;}
 .hamburger svg{width:24px;height:24px;}
 @media(max-width:768px){
+  body, html { overflow-x: hidden; max-width: 100vw; }
   .topbar{padding:0 14px;min-height:64px;flex-wrap:wrap;align-items:center;}
   .topbar-brand{min-width:0;gap:10px;}
   .topbar-title{font-size:1rem;line-height:1.1;}
@@ -51,12 +52,18 @@ a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fo
   .layout{padding:18px 12px;}
   .main-toolbar{flex-direction:column;align-items:stretch;}
   .search-wrap,.sort-select,.main-toolbar .btn{width:100%;}
-  .sidebar{position:static;top:auto;margin-bottom:20px;}
-  .filter-tag{display:inline-flex;margin:4px 2px;padding:6px 14px;font-size:.8rem;}
+  .sidebar{position:static;top:auto;margin-bottom:20px;display:flex;flex-direction:column;}
+  .sidebar-head{padding:10px 14px;}
+  .sidebar-section{padding:10px 14px;display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;border-bottom:1px solid #eee;gap:8px;}
+  .sidebar-section label{display:none;}
+  .filter-tag{display:inline-flex;margin:0;padding:6px 14px;font-size:.8rem;white-space:nowrap;flex-shrink:0;}
+  .sidebar-stats{display:none;}
+  .ai-sidebar-section{display:flex;flex-wrap:wrap;gap:8px;}
+  .ai-quick-btn{width:auto;flex:1;min-width:140px;margin:0;}
   .articles-grid{grid-template-columns:1fr;}
   .card-meta{gap:10px;align-items:flex-start;flex-direction:column;}
   .healthbot-fab{width:52px;height:52px;bottom:18px;right:18px;}
-  .healthbot-panel{width:calc(100vw - 24px);right:12px;bottom:84px;}
+  .healthbot-panel{width:calc(100% - 24px);right:12px;bottom:84px;}
 }
 
 /* ── HERO ── */
@@ -279,5 +286,5 @@ a{text-decoration:none;color:inherit;}button{cursor:pointer;font-family:var(--fo
 .loading-overlay .spinner-lg{width:48px;height:48px;border:4px solid rgba(255,255,255,.3);border-top-color:var(--amber-light);border-radius:50%;animation:spin 1s linear infinite;}
 .loading-overlay p{font-size:1rem;font-weight:600;}
 
-@media(max-width:600px){.hero-stats{gap:16px;}.articles-grid{grid-template-columns:1fr;}.topbar-title{font-size:1rem;}.healthbot-panel{width:calc(100vw - 32px);right:16px;}}
+@media(max-width:600px){.hero-stats{gap:16px;}.articles-grid{grid-template-columns:1fr;}.topbar-title{font-size:1rem;}.healthbot-panel{width:calc(100% - 32px);right:16px;}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
