@@ -1,0 +1,65 @@
+{
+  "meta": {
+    "system": "HealthPulse SL",
+    "version": "1.0.0",
+    "license": "MIT",
+    "sdg_alignment": "SDG 3 - Good Health & Well-being",
+    "data_format": "JSON",
+    "exported_at": "2026-11-01",
+    "privacy_note": "No personal user data. Article metadata only."
+  },
+  "articles": [
+    {
+      "id": "a1",
+      "topic": "malaria",
+      "title": "Understanding Malaria: Causes, Symptoms & Prevention",
+      "excerpt": "Malaria remains one of the leading causes of illness and death in Sierra Leone. Understanding how it spreads is the first step to protection.",
+      "body": "Malaria is caused by Plasmodium parasites transmitted through the bites of infected female Anopheles mosquitoes...",
+      "tags": ["prevention", "treatment", "mosquito", "community"],
+      "author": "Dr. A. Kamara",
+      "date": "2024-08-15",
+      "lang": "en"
+    },
+    {
+      "id": "a2",
+      "topic": "maternal",
+      "title": "Safe Motherhood: Antenatal Care in Sierra Leone",
+      "excerpt": "Regular antenatal visits dramatically reduce maternal and infant mortality. Every pregnant woman deserves quality care from the first trimester.",
+      "tags": ["antenatal", "pregnancy", "newborn", "free-healthcare"],
+      "author": "Nurse F. Conteh",
+      "date": "2024-09-02",
+      "lang": "en"
+    },
+    {
+      "id": "a3",
+      "topic": "nutrition",
+      "title": "Fighting Malnutrition: Feeding Your Child for Life",
+      "excerpt": "Stunting and wasting affect millions of children across West Africa. A diverse diet in the first 1,000 days of life changes everything.",
+      "tags": ["children", "breastfeeding", "diet", "stunting"],
+      "author": "Nutritionist M. Sesay",
+      "date": "2024-07-20",
+      "lang": "en"
+    },
+    {
+      "id": "a4",
+      "topic": "water",
+      "title": "Clean Water & Sanitation: A Human Right, Not a Luxury",
+      "excerpt": "Access to safe water prevents diarrhoea, cholera, and typhoid. Hand-washing alone can cut child deaths by up to 45%.",
+      "tags": ["cholera", "handwashing", "latrine", "water"],
+      "author": "WASH Officer T. Bangura",
+      "date": "2024-10-10",
+      "lang": "en"
+    }
+  ],
+  "topics": [
+    {"id": "malaria",      "label": "Malaria",           "emoji": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 2C8 2 5 5 5 9c0 3 2 5 4 6v5c0 1 1 2 3 2s3-1 3-2v-5c2-1 4-3 4-6 0-4-3-7-7-7z\"/><path d=\"M12 2v2\"/><path d=\"M8 4l1 1\"/><path d=\"M16 4l-1 1\"/></svg>"},
+    {"id": "maternal",     "label": "Maternal Health",    "emoji": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M12 12v8\"/><path d=\"M8 16h8\"/><path d=\"M6 12c0-2 2-4 6-4s6 2 6 4\"/></svg>"},
+    {"id": "nutrition",    "label": "Nutrition",          "emoji": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 6v12\"/><path d=\"M8 10h8\"/><path d=\"M8 14h8\"/></svg>"},
+    {"id": "hiv",          "label": "HIV/AIDS",           "emoji": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 2L4 8v8l8 6 8-6V8l-8-6z\"/><path d=\"M12 8v8\"/><path d=\"M8 12h8\"/></svg>"},
+    {"id": "water",        "label": "Water & Sanitation", "emoji": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 2.5c0 0-7 6-7 11a7 7 0 0 0 14 0c0-5-7-11-7-11z\"/><path d=\"M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z\"/></svg>"},
+    {"id": "mentalhealth", "label": "Mental Health",      "emoji": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 2a9 9 0 0 0-9 9v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2v-4a2 2 0 0 1 4 0v4a2 2 0 0 0 2 2h4c1.1 0 2-.9 2-2v-7a9 9 0 0 0-9-9z\"/><path d=\"M12 8v2\"/><path d=\"M9 9h6\"/></svg>"},
+    {"id": "vaccination",  "label": "Vaccination",        "emoji": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M18 6l-2 2\"/><path d=\"M12 2v4\"/><path d=\"M6 6l2 2\"/><path d=\"M9 12l-2 2\"/><rect x=\"11\" y=\"6\" width=\"2\" height=\"12\" rx=\"1\"/><path d=\"M10 18h4\"/><path d=\"M12 14v4\"/></svg>"},
+    {"id": "tuberculosis", "label": "Tuberculosis",       "emoji": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 10c0-4 4-7 8-7s8 3 8 7c0 3-2 5-4 6v4c0 1-1 2-4 2s-4-1-4-2v-4c-2-1-4-3-4-6z\"/><path d=\"M8 10c0-2 2-3 4-3s4 1 4 3\"/><path d=\"M10 14h4\"/></svg>"}
+  ],
+  "languages_supported": ["en", "kr", "tm", "mn"]
+}

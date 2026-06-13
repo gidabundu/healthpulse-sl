@@ -1,0 +1,172 @@
+{
+  "articles": [
+    {
+      "id": "a1",
+      "topic": "malaria",
+      "title": "Understanding Malaria: Causes, Symptoms & Prevention",
+      "excerpt": "Malaria remains one of the leading causes of illness and death in Sierra Leone. Understanding how it spreads is the first step to protection.",
+      "body": "Malaria is caused by Plasmodium parasites transmitted through the bites of infected female Anopheles mosquitoes. Common symptoms include fever, chills, headache, and fatigue. Prevention methods include using insecticide-treated bed nets, indoor residual spraying, and taking antimalarial medication as prescribed. Early diagnosis and treatment are crucial for recovery.",
+      "author": "Dr. A. Kamara",
+      "tags": "prevention,treatment,mosquito,community",
+      "date": "2024-08-15",
+      "lang": "en",
+      "created_at": "2026-06-12T19:23:11.502Z",
+      "updated_at": "2026-06-12T19:23:11.517Z"
+    },
+    {
+      "id": "a2",
+      "topic": "maternal",
+      "title": "Safe Motherhood: Antenatal Care in Sierra Leone",
+      "excerpt": "Regular antenatal visits dramatically reduce maternal and infant mortality. Every pregnant woman deserves quality care from the first trimester.",
+      "body": "Antenatal care (ANC) is essential for monitoring the health of both mother and baby during pregnancy. In Sierra Leone, the Free Health Care Initiative provides free ANC services. Key components include blood pressure monitoring, iron supplementation, tetanus vaccination, and malaria prevention. Women should attend at least 8 ANC visits for optimal outcomes.",
+      "author": "Nurse F. Conteh",
+      "tags": "antenatal,pregnancy,newborn,free-healthcare",
+      "date": "2024-09-02",
+      "lang": "en",
+      "created_at": "2026-06-12T19:23:11.517Z",
+      "updated_at": "2026-06-12T19:23:11.517Z"
+    },
+    {
+      "id": "a3",
+      "topic": "nutrition",
+      "title": "Fighting Malnutrition: Feeding Your Child for Life",
+      "excerpt": "Stunting and wasting affect millions of children across West Africa. A diverse diet in the first 1,000 days of life changes everything.",
+      "body": "Good nutrition is the foundation of child development. The first 1,000 days from conception to age 2 are critical. Breastfeeding exclusively for the first 6 months provides essential nutrients and antibodies. After 6 months, introduce complementary foods rich in protein, vitamins, and minerals. Community nutrition programs and education can help families make informed dietary choices.",
+      "author": "Nutritionist M. Sesay",
+      "tags": "children,breastfeeding,diet,stunting",
+      "date": "2024-07-20",
+      "lang": "en",
+      "created_at": "2026-06-12T19:23:11.517Z",
+      "updated_at": "2026-06-12T19:23:11.517Z"
+    },
+    {
+      "id": "a4",
+      "topic": "water",
+      "title": "Clean Water & Sanitation: A Human Right, Not a Luxury",
+      "excerpt": "Access to safe water prevents diarrhoea, cholera, and typhoid. Hand-washing alone can cut child deaths by up to 45%.",
+      "body": "Clean water and proper sanitation are fundamental to public health. In Sierra Leone, waterborne diseases remain a leading cause of child mortality. Simple practices like boiling drinking water, using latrines, and washing hands with soap can prevent most waterborne illnesses. Community-led total sanitation (CLTS) approaches have shown success in improving hygiene behaviors and reducing disease transmission.",
+      "author": "WASH Officer T. Bangura",
+      "tags": "cholera,handwashing,latrine,water",
+      "date": "2024-10-10",
+      "lang": "en",
+      "created_at": "2026-06-12T19:23:11.517Z",
+      "updated_at": "2026-06-12T19:23:11.517Z"
+    },
+    {
+      "id": "a5",
+      "topic": "hiv",
+      "title": "HIV/AIDS: Know Your Status, Protect Your Community",
+      "excerpt": "HIV testing is free, confidential, and widely available. With early treatment, people living with HIV lead long, healthy lives.",
+      "body": "HIV weakens the immune system and can progress to AIDS without treatment. In Sierra Leone, about 1.5% of adults have HIV. HIV spreads through unprotected sex, sharing needles, and from mother to child. HIV is NOT spread through hugging, sharing food, or mosquito bites. ART suppresses the virus to undetectable levels — U=U means people on effective treatment cannot pass HIV to partners. PMTCT programs, started early, reduce mother-to-child transmission to under 2%. All pregnant women should test at their first ANC visit.",
+      "author": "Dr. I. Koroma",
+      "tags": "testing,ART,PMTCT,stigma",
+      "date": "2024-06-05",
+      "lang": "en",
+      "created_at": "2026-06-12T19:23:11.517Z",
+      "updated_at": "2026-06-12T19:23:11.517Z"
+    },
+    {
+      "id": "a6",
+      "topic": "vaccination",
+      "title": "Vaccines Save Lives: The Immunisation Schedule for Children",
+      "excerpt": "Vaccines prevent over 20 life-threatening diseases. Keeping your child's immunisation card up to date is one of the most important things a parent can do.",
+      "body": "Immunisation is one of history's most successful public health interventions. Sierra Leone's EPI provides free vaccines at government facilities. The schedule includes BCG at birth, polio and pentavalent vaccines at 6/10/14 weeks, measles and rubella at 9 and 15 months, and yellow fever vaccine. All licensed vaccines have been rigorously tested. Mild side effects like soreness or low-grade fever are normal and temporary. CHWs and traditional leaders are essential for maintaining high coverage, especially in remote areas.",
+      "author": "PHO S. Koroma",
+      "tags": "EPI,children,polio,measles",
+      "date": "2024-11-01",
+      "lang": "en",
+      "created_at": "2026-06-12T19:23:11.517Z",
+      "updated_at": "2026-06-12T19:23:11.517Z"
+    },
+    {
+      "id": "a7",
+      "topic": "mentalhealth",
+      "title": "Mental Health Matters: Breaking the Stigma in Sierra Leone",
+      "excerpt": "Mental health conditions affect one in four people globally. Seeking help is a sign of strength, not weakness.",
+      "body": "Mental health disorders — depression, anxiety, PTSD, psychosis — are common, treatable, and nothing to be ashamed of. Sierra Leone's civil war and Ebola epidemic left deep psychological scars. Common conditions include depression, anxiety disorders, PTSD, and substance use disorders. Stigma remains the biggest barrier to care. Families and communities help by listening without judgment and encouraging treatment. Mental health services are available at referral hospitals and through community rehabilitation programs.",
+      "author": "Counsellor A. Jalloh",
+      "tags": "stigma,depression,PTSD,community",
+      "date": "2024-05-18",
+      "lang": "en",
+      "created_at": "2026-06-12T19:23:11.517Z",
+      "updated_at": "2026-06-12T19:23:11.517Z"
+    },
+    {
+      "id": "a8",
+      "topic": "tuberculosis",
+      "title": "Tuberculosis: Symptoms, Diagnosis & Free Treatment",
+      "excerpt": "TB is curable. A cough lasting more than two weeks warrants a free TB test at your nearest health facility.",
+      "body": "TB is caused by Mycobacterium tuberculosis and primarily affects the lungs. Sierra Leone has a significant TB burden, especially in crowded, poorly ventilated settings. Symptoms: persistent cough of three+ weeks, coughing blood, chest pain, weight loss, night sweats, fatigue. TB spreads through the air when infected people cough or speak. Diagnosis: GeneXpert testing and chest X-ray. Treatment is free — six months of antibiotics. Completing the full course prevents drug-resistant TB. People living with HIV are especially vulnerable to TB co-infection.",
+      "author": "Dr. M. Fofanah",
+      "tags": "treatment,diagnosis,lung,co-infection",
+      "date": "2024-04-12",
+      "lang": "en",
+      "created_at": "2026-06-12T19:23:11.517Z",
+      "updated_at": "2026-06-12T19:23:11.517Z"
+    },
+    {
+      "id": "a9",
+      "topic": "diabetes",
+      "title": "Diabetes in Sierra Leone: Managing Blood Sugar for Better Health",
+      "excerpt": "Diabetes is on the rise in Sierra Leone. Early detection and lifestyle changes can prevent serious complications.",
+      "body": "Diabetes occurs when the body cannot properly use or produce insulin, leading to high blood sugar levels. Type 2 diabetes is becoming more common due to changing diets and lifestyles. Symptoms include excessive thirst, frequent urination, unexplained weight loss, fatigue, and slow-healing wounds. Many people have diabetes without knowing it. Prevention and management: maintain a healthy weight, exercise regularly, limit sugary foods and drinks, and eat more vegetables and whole grains. Regular blood sugar testing is important, especially for those over 40 or with a family history. Treatment includes medication and insulin when needed.",
+      "author": "Dr. S. Turay",
+      "tags": "blood-sugar,prevention,lifestyle,complications",
+      "date": "2024-03-25",
+      "lang": "en",
+      "created_at": "2026-06-12T19:23:11.517Z",
+      "updated_at": "2026-06-12T19:23:11.517Z"
+    },
+    {
+      "id": "a10",
+      "topic": "hypertension",
+      "title": "High Blood Pressure: The Silent Killer You Can Control",
+      "excerpt": "Hypertension often has no symptoms but can cause stroke and heart disease. Regular blood pressure checks save lives.",
+      "body": "High blood pressure (hypertension) forces the heart to work harder than normal, damaging arteries over time. It is called the 'silent killer' because many people feel no symptoms until serious damage occurs. Risk factors include age, family history, high salt intake, lack of exercise, obesity, and stress. Prevention: reduce salt in your diet, exercise for 30 minutes daily, maintain a healthy weight, limit alcohol, and manage stress. Treatment includes lifestyle changes and medication. Regular monitoring at home or at health facilities is essential. Blood pressure should be kept below 130/80 mmHg.",
+      "author": "Dr. A. Mansaray",
+      "tags": "blood-pressure,stroke,heart,prevention",
+      "date": "2024-02-14",
+      "lang": "en",
+      "created_at": "2026-06-12T19:23:11.517Z",
+      "updated_at": "2026-06-12T19:23:11.517Z"
+    },
+    {
+      "id": "a11",
+      "topic": "cholera",
+      "title": "Cholera Prevention: Clean Water Saves Lives",
+      "excerpt": "Cholera spreads through contaminated water and food. During rainy season, simple precautions can protect your family.",
+      "body": "Cholera is an acute diarrhoeal infection caused by Vibrio cholerae bacteria. It causes severe watery diarrhoea and dehydration that can be fatal within hours if untreated. Cholera spreads through drinking contaminated water, eating contaminated food, and poor sanitation. Outbreaks are common during rainy season when flooding contaminates water sources. Prevention: drink only boiled or treated water, wash hands with soap, cook food thoroughly, use latrines, and avoid street food during outbreaks. Treatment is simple and effective: oral rehydration salts (ORS) and antibiotics. Seek care immediately if you have severe watery diarrhoea.",
+      "author": "Dr. E. Kamara",
+      "tags": "water,diarrhoea,ORS,prevention",
+      "date": "2024-01-08",
+      "lang": "en",
+      "created_at": "2026-06-12T19:23:11.517Z",
+      "updated_at": "2026-06-12T19:23:11.517Z"
+    },
+    {
+      "id": "a12",
+      "topic": "familyplanning",
+      "title": "Family Planning: Planning Your Family, Planning Your Future",
+      "excerpt": "Family planning allows couples to decide when to have children and how many to have. It improves maternal and child health.",
+      "body": "Family planning enables individuals and couples to anticipate and attain their desired number of children and the spacing and timing of their births. Methods include condoms, contraceptive pills, injections, implants, IUDs, and natural family planning. All methods are available at government health facilities. Benefits: reduces maternal and infant mortality, allows women to pursue education and work, improves child health through proper spacing, and reduces poverty. Family planning is voluntary and confidential. Couples should discuss options together and choose the method that works best for them.",
+      "author": "Midwife M. Bangura",
+      "tags": "contraception,maternal,spacing,health",
+      "date": "2024-12-20",
+      "lang": "en",
+      "created_at": "2026-06-12T19:23:11.517Z",
+      "updated_at": "2026-06-12T19:23:11.517Z"
+    }
+  ],
+  "admin_users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "$2b$10$Oi.PzAICi4niJ8wbG1Tbf.U3fi4Op9/1M.RK2B4ACWW6euZUsbana",
+      "email": "admin@healthpulse.sl",
+      "full_name": "System Administrator",
+      "role": "superadmin",
+      "created_at": "2026-06-12T19:23:11.695Z",
+      "last_login": "2026-06-13T08:41:52.994Z"
+    }
+  ]
+}
