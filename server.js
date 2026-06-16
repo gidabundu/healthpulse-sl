@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const { Pool } = require('pg');
+const multer = require('multer');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -126,7 +127,7 @@ app.post('/api/ai', async (req, res) => {
       };
     }
     
-    const apiURL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    const apiURL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
     
     const response = await fetch(apiURL, {
       method: 'POST',
@@ -151,6 +152,46 @@ app.post('/api/ai', async (req, res) => {
   } catch (error) {
     console.error('AI route error:', error);
     res.status(500).json({ error: 'Internal Server Error during AI generation' });
+  }
+});
+
+// Configure multer storage for image uploads
+const uploadStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, 'images'));
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const ext = path.extname(file.originalname);
+    cb(null, file.fieldname + '-' + uniqueSuffix + ext);
+  }
+});
+
+const upload = multer({ 
+  storage: uploadStorage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // limit: 5MB
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = /jpeg|jpg|png|webp|gif/;
+    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = allowedTypes.test(file.mimetype);
+    if (extname && mimetype) {
+      return cb(null, true);
+    }
+    cb(new Error('Only images (jpg, jpeg, png, webp, gif) are allowed!'));
+  }
+});
+
+// POST upload article image (requires authentication)
+app.post('/api/upload', authenticateAdmin, upload.single('image'), (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    const filePath = `images/${req.file.filename}`;
+    res.json({ url: filePath });
+  } catch (error) {
+    console.error('File upload error:', error);
+    res.status(500).json({ error: error.message || 'File upload failed' });
   }
 });
 

@@ -169,6 +169,53 @@ function setupEventListeners() {
       }
     });
   }
+
+  // Handle Custom Image Upload
+  const imageUpload = document.getElementById('image-upload');
+  if (imageUpload) {
+    imageUpload.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('image', file);
+
+      const uploadBtn = document.querySelector('label[for="image-upload"]');
+      const originalHtml = uploadBtn.innerHTML;
+      uploadBtn.style.pointerEvents = 'none';
+      uploadBtn.innerHTML = 'Uploading...';
+
+      try {
+        const response = await fetch(`${API_BASE}/upload`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: formData
+        });
+
+        if (!response.ok) {
+          const err = await response.json().catch(() => ({ error: 'Upload failed' }));
+          throw new Error(err.error || 'Upload failed');
+        }
+
+        const data = await response.json();
+        const articleImgInput = document.getElementById('article-image');
+        if (articleImgInput) {
+          articleImgInput.value = data.url;
+          // Dispatch input event to trigger preview update
+          articleImgInput.dispatchEvent(new Event('input'));
+        }
+      } catch (error) {
+        console.error('Upload error:', error);
+        alert(error.message || 'Image upload failed. Please try again.');
+      } finally {
+        uploadBtn.style.pointerEvents = 'auto';
+        uploadBtn.innerHTML = originalHtml;
+        imageUpload.value = ''; // Reset file input
+      }
+    });
+  }
 }
 
 // Show Login Screen
