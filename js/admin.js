@@ -144,6 +144,7 @@ function setupEventListeners() {
         closeModal(modal.id);
       }
     });
+  });
   // Live Editor Preview Listeners
   const editorFields = [
     'article-title', 'article-topic', 'article-author', 'article-date', 
