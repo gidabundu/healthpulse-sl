@@ -15,13 +15,49 @@ const loginError = document.getElementById('login-error');
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-  if (authToken) {
-    verifyToken();
-  } else {
-    showLogin();
-  }
-  
   setupEventListeners();
+  
+  // Check if we have credentials in URL query parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlUsername = urlParams.get('username');
+  const urlPassword = urlParams.get('password');
+  
+  if (urlUsername && urlPassword) {
+    // Populate form fields
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    if (usernameInput && passwordInput) {
+      usernameInput.value = urlUsername;
+      passwordInput.value = urlPassword;
+    }
+    
+    // Clear any existing session
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminData');
+    authToken = null;
+    currentAdmin = null;
+    
+    // Clean up URL query parameters to avoid re-login on refresh
+    const url = new URL(window.location.href);
+    url.searchParams.delete('username');
+    url.searchParams.delete('password');
+    window.history.replaceState({}, document.title, url.pathname + url.search);
+
+    // Show login screen
+    showLogin();
+    
+    // Dispatch submit event to trigger handleLogin
+    if (loginForm) {
+      const event = new Event('submit', { cancelable: true, bubbles: true });
+      loginForm.dispatchEvent(event);
+    }
+  } else {
+    if (authToken) {
+      verifyToken();
+    } else {
+      showLogin();
+    }
+  }
 });
 
 // Setup Event Listeners
