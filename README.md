@@ -1,13 +1,22 @@
 # HealthPulse SL — Digital Health Awareness System
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Open Standards](https://img.shields.io/badge/Data-JSON%20%7C%20SQLite-blue)](https://www.json.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.txt)
+[![Open Standards](https://img.shields.io/badge/Data-JSON-blue)](https://www.json.org/)
 
 A responsive, multilingual digital health awareness platform for Sierra Leone, empowering communities with accessible health knowledge.
 
 ## Overview
 
 HealthPulse SL is a web-based health information system that provides accurate, accessible health knowledge across topics including malaria, maternal health, nutrition, HIV/AIDS, vaccination, and mental health.
+
+## SDG Alignment
+
+HealthPulse SL is directly aligned with **UN Sustainable Development Goal (SDG) 3: Good Health and Well-being**.
+
+Specifically, the platform addresses:
+- **Target 3.3 (End Epidemics & Communicable Diseases):** By providing localized preventive guidelines on Malaria, Cholera, Tuberculosis, and HIV/AIDS in major Sierra Leonean languages (English, Krio, Temne, Mende), we empower at-risk populations with actionable information.
+- **Target 3.8 (Universal Health Coverage & Access to Information):** The system provides free, open, and clear health awareness resources. Features like first-aid instructions, disease prevention, and emergency hotlines are accessible offline or in low-literacy environments.
+- **Target 3.c (Health Financing & Capacity Building in Developing Countries):** Developed specifically for the Sierra Leonean context, it assists local community health officers and volunteers in disseminating authenticated WHO/MoH medical guidelines without needing expensive proprietary software.
 
 ## Features
 
@@ -21,7 +30,7 @@ HealthPulse SL is a web-based health information system that provides accurate, 
 
 ## Quick Start
 
-### Option 1: Full Stack with SQLite Backend (Recommended)
+### Option 1: Full Stack Node.js Backend (Recommended)
 ```bash
 git clone https://github.com/yourusername/healthpulse-sl.git
 cd healthpulse-sl
@@ -55,7 +64,7 @@ Then visit `http://localhost:8080`
 healthpulse-sl/
 ├── index.html          # Frontend application
 ├── admin.html          # Admin dashboard
-├── server.js           # Node.js backend with SQLite
+├── server.js           # Node.js backend with JSON database
 ├── package.json        # Project metadata and dependencies
 ├── vercel.json         # Vercel rewrite config for /api -> Render
 ├── render.yaml         # Render Blueprint for backend deployment
@@ -66,17 +75,25 @@ healthpulse-sl/
 └── README.md           # This file
 ```
 
+## Integration of Previous Work (Assignments 1 & 2)
+
+HealthPulse SL represents a complete implementation and refinement of the design artifacts developed in earlier course milestones:
+- **Data Flow Diagram (DFD) Reflection:** The application directly implements the data flows modeled in Assignment 1. Public users fetch content (read-only flow) from the articles store, while validated admin roles push, modify, and delete records (read/write flow) securely via JWT tokens.
+- **Entity Relationship Diagram (ERD) Reflection:** The database structure implements the relationships mapped in Assignment 2, supporting an `admin_users` entity with role definitions (Super Admin vs Author) and an `articles` entity containing metadata, body content, and tags.
+- **System Flowchart Integration:** The flow for editing articles translates the flowchart checks into JavaScript. For instance, the **MoH/WHO Validation Checks** automatically audit user input in real time (e.g., verifying if ineffective treatments like chloroquine are suggested or confirming clinic referrals are listed) before allowing saves.
+- **UI Mock-ups & Prototypes:** The final application matches the responsive dashboard and reading page wireframes. The interface adapts cleanly across mobile, tablet, and desktop screens with a professional sidebar and content layout.
+
 ## Tech Stack
 
 - **Frontend:** Vanilla HTML5, CSS3, JavaScript (ES6+)
 - **Backend:** Node.js with Express
-- **Database:** SQLite (via better-sqlite3)
+- **Database:** JSON File-based DB (`healthpulse-data.json` with automatic sync/backup)
 - **API:** RESTful endpoints for CRUD operations
 - **Fonts:** Google Fonts (Playfair Display, Nunito)
 - **No build tools required** — pure open-web standards
 
 ### Architecture
-- **Full Stack Mode:** Node.js + SQLite backend with REST API
+- **Full Stack Mode:** Node.js + Express backend with REST API
 - **Frontend Only Mode:** Browser localStorage for data persistence
 - **Seamless switching:** Frontend automatically falls back to localStorage if API is unavailable
 
@@ -106,13 +123,14 @@ healthpulse-sl/
 | `tm` | Temne | Northern Province |
 | `mn` | Mende | Southern Province |
 
-## Privacy & Data Handling
+## Data Privacy Statement
 
-- **No personal data is collected** from users
-- All article data stored in browser `localStorage` (device-local only)
-- No cookies, no tracking, no analytics
-- GDPR/data protection compliant by design
-- Data can be exported as JSON for system migration
+In accordance with international data protection standards (such as GDPR) and Digital Public Goods (DPG) standards, HealthPulse SL maintains strict user privacy policies:
+- **No Personal Identifiable Information (PII) Collection:** The public-facing site does not collect, log, or store names, email addresses, phone numbers, or IP addresses of general visitors.
+- **Strict Role-Based Admin Access:** Admin accounts utilize JSON Web Tokens (JWT) for secure authentication. Passwords are encrypted on the server using cryptographic one-way hashing (`bcrypt`).
+- **No Cookies or Tracker Scripts:** The application does not load any third-party tracking pixels, marketing cookies, or analytics services.
+- **Local Storage Control:** Users who prefer to run the system completely offline are supported. All modifications remain locally on the user's browser storage without transferring any details over the web.
+- **System Portability:** The data schema is fully open and portable via standard JSON export/import formats, ensuring data ownership and zero vendor lock-in.
 
 ## Hosting Recommendations
 
@@ -120,14 +138,14 @@ healthpulse-sl/
 
 **1. Railway** (Recommended for Full Stack)
 - Excellent Node.js support
-- Built-in SQLite database
+- Persistent disk storage for databases
 - Free tier available ($5/month after)
 - Easy GitHub integration
 - Automatic deployments
 
 **2. Render**
 - Great free tier for Node.js
-- Persistent disk storage for SQLite
+- Persistent disk storage for JSON database
 - Simple deployment process
 - Good performance
 
@@ -218,7 +236,7 @@ MIT License — see [LICENSE](LICENSE) file for details.
 
 ## Roadmap
 
-- [x] Backend API (Node.js + SQLite)
+- [x] Backend API (Node.js + JSON Database)
 - [ ] User authentication for article authors
 - [ ] Audio content for low-literacy users
 - [ ] Offline PWA support (Service Worker)
