@@ -10,7 +10,7 @@
       "tags": "prevention,treatment,mosquito,community",
       "date": "2024-08-15",
       "lang": "en",
-      "image": "https://images.unsplash.com/photo-1579684389782-64d84b5e902a?w=800&auto=format&fit=crop&q=60",
+      "image": "images/malaria.jpg",
       "created_at": "2026-06-12T19:23:11.502Z",
       "updated_at": "2026-06-12T19:23:11.517Z"
     },
@@ -66,7 +66,7 @@
       "tags": "testing,ART,PMTCT,stigma",
       "date": "2024-06-05",
       "lang": "en",
-      "image": "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&auto=format&fit=crop&q=60",
+      "image": "images/hiv.jpg",
       "created_at": "2026-06-12T19:23:11.517Z",
       "updated_at": "2026-06-12T19:23:11.517Z"
     },
@@ -150,7 +150,7 @@
       "tags": "water,diarrhoea,ORS,prevention",
       "date": "2024-01-08",
       "lang": "en",
-      "image": "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=800&auto=format&fit=crop&q=60",
+      "image": "images/cholera.jpg",
       "created_at": "2026-06-12T19:23:11.517Z",
       "updated_at": "2026-06-12T19:23:11.517Z"
     },
@@ -167,6 +167,20 @@
       "image": "https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=800&auto=format&fit=crop&q=60",
       "created_at": "2026-06-12T19:23:11.517Z",
       "updated_at": "2026-06-12T19:23:11.517Z"
+    },
+    {
+      "id": "a13",
+      "topic": "water",
+      "title": "Typhoid Fever: Transmission, Symptoms and Prevention",
+      "excerpt": "Typhoid fever is a serious bacterial infection spread through contaminated food and water. Learn the symptoms and prevention measures.",
+      "body": "Typhoid germs from infected feces contaminate food and water. When these germs enter the body through the mouth, they cause typhoid fever.\n\nSymptoms usually appear 7 to 14 days after infection. Common symptoms include a sustained high fever, headache, weakness, fatigue, loss of appetite, stomach pain, nausea, vomiting, constipation, or diarrhoea.\n\nImmediate hydration is critical: give plenty of clean fluids and use ORS to prevent dehydration. Go to a health facility for proper treatment and early antibiotics.\n\nPrevention:\n1. Wash hands with soap and clean water (after using the toilet, before preparing food, before eating).\n2. Maintain good hygiene to stop the spread of typhoid germs.\n3. Ensure drinking water is clean and food is properly covered.",
+      "author": "Dr. E. Kamara",
+      "tags": "water,hygiene,typhoid,prevention",
+      "date": "2024-01-15",
+      "lang": "en",
+      "image": "images/typhoid.png",
+      "created_at": "2026-06-16T02:35:00.000Z",
+      "updated_at": "2026-06-16T02:35:00.000Z"
     }
   ],
   "admin_users": [
