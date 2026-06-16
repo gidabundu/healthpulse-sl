@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const { Pool } = require('pg');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -18,7 +19,9 @@ if (JWT_SECRET === 'healthpulse-admin-secret-key-2024') {
 }
 
 // Middleware
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false
+}));
 
 const corsOptions = {
   origin: process.env.ALLOWED_ORIGINS
@@ -40,85 +43,23 @@ const loginRateLimiter = rateLimit({
   message: { error: 'Too many login attempts. Please try again after 15 minutes.' }
 });
 
-// File-based database
-const DATA_FILE = process.env.DATA_FILE || path.join(__dirname, 'healthpulse-data.json');
-const FALLBACK_DATA_FILE = path.join('/tmp', 'healthpulse-data.json');
-const SEED_FILE = path.join(__dirname, 'healthpulse-data.json');
-
-// Initialize database file
-let db = {
-  articles: [],
-  admin_users: []
-};
-
-if (fs.existsSync(DATA_FILE)) {
-  try {
-    db = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
-  } catch (error) {
-    console.error('Error reading database file, starting fresh');
+// PostgreSQL Connection Pool
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
   }
-}
+});
 
-function loadSeedArticles() {
-  try {
-    const seedDb = JSON.parse(fs.readFileSync(SEED_FILE, 'utf8'));
-    return Array.isArray(seedDb.articles) ? seedDb.articles : [];
-  } catch (error) {
-    console.error('Error reading seed article file, falling back to built-in samples');
-    return [];
-  }
-}
+pool.on('error', (err) => {
+  console.error('Unexpected error on idle PostgreSQL client', err);
+});
 
 // Helper to parse tags safely (whether stored as array or string)
 function parseTags(tags) {
   if (Array.isArray(tags)) return tags;
   if (typeof tags === 'string') return tags.split(',').map(t => t.trim()).filter(Boolean);
   return [];
-}
-
-// Save database to file
-function saveDb() {
-  const payload = JSON.stringify(db, null, 2);
-
-  try {
-    fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
-    fs.writeFileSync(DATA_FILE, payload);
-    return DATA_FILE;
-  } catch (error) {
-    console.warn(`Primary data path unavailable (${DATA_FILE}), falling back to ${FALLBACK_DATA_FILE}`);
-    fs.writeFileSync(FALLBACK_DATA_FILE, payload);
-    return FALLBACK_DATA_FILE;
-  }
-}
-
-// Ensure the bundled 12-article seed set is present.
-const seedArticles = loadSeedArticles();
-if (seedArticles.length > 0) {
-  const existingIds = new Set(db.articles.map(article => article.id));
-  const missingSeedArticles = seedArticles.filter(article => !existingIds.has(article.id));
-
-  if (missingSeedArticles.length > 0) {
-    db.articles = [...db.articles, ...missingSeedArticles];
-    saveDb();
-    console.log(`Seed articles merged into database (${missingSeedArticles.length} added)`);
-  }
-}
-
-// Insert default admin user if admin_users is empty
-if (db.admin_users.length === 0) {
-  const defaultPassword = bcrypt.hashSync('admin123', 10);
-  db.admin_users.push({
-    id: 1,
-    username: 'admin',
-    password: defaultPassword,
-    email: 'admin@healthpulse.sl',
-    full_name: 'System Administrator',
-    role: 'superadmin',
-    created_at: new Date().toISOString(),
-    last_login: null
-  });
-  saveDb();
-  console.log('Default admin user created (username: admin, password: admin123)');
 }
 
 // Authentication Middleware
@@ -216,7 +157,7 @@ app.post('/api/ai', async (req, res) => {
 // Admin Authentication Routes
 
 // Admin Login (rate limited)
-app.post('/api/admin/login', loginRateLimiter, (req, res) => {
+app.post('/api/admin/login', loginRateLimiter, async (req, res) => {
   try {
     const { username, password } = req.body;
     
@@ -224,7 +165,8 @@ app.post('/api/admin/login', loginRateLimiter, (req, res) => {
       return res.status(400).json({ error: 'Username and password required' });
     }
     
-    const admin = db.admin_users.find(u => u.username === username);
+    const result = await pool.query('SELECT * FROM admin_users WHERE username = $1', [username]);
+    const admin = result.rows[0];
     
     if (!admin) {
       return res.status(401).json({ error: 'Invalid credentials' });
@@ -237,8 +179,7 @@ app.post('/api/admin/login', loginRateLimiter, (req, res) => {
     }
     
     // Update last login
-    admin.last_login = new Date().toISOString();
-    saveDb();
+    await pool.query('UPDATE admin_users SET last_login = NOW() WHERE id = $1', [admin.id]);
     
     // Generate JWT token
     const token = jwt.sign(
@@ -269,20 +210,19 @@ app.get('/api/admin/verify', authenticateAdmin, (req, res) => {
 });
 
 // Admin Dashboard Stats
-app.get('/api/admin/stats', authenticateAdmin, (req, res) => {
+app.get('/api/admin/stats', authenticateAdmin, async (req, res) => {
   try {
-    const totalArticles = db.articles.length;
-    const totalAdmins = db.admin_users.length;
-    const recentArticles = [...db.articles]
-      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-      .slice(0, 5);
+    const articlesCountRes = await pool.query('SELECT COUNT(*) FROM articles');
+    const totalArticles = parseInt(articlesCountRes.rows[0].count, 10);
     
-    const topicCounts = {};
-    db.articles.forEach(article => {
-      topicCounts[article.topic] = (topicCounts[article.topic] || 0) + 1;
-    });
+    const adminsCountRes = await pool.query('SELECT COUNT(*) FROM admin_users');
+    const totalAdmins = parseInt(adminsCountRes.rows[0].count, 10);
     
-    const topicStats = Object.entries(topicCounts).map(([topic, count]) => ({ topic, count }));
+    const recentArticlesRes = await pool.query('SELECT * FROM articles ORDER BY created_at DESC LIMIT 5');
+    const recentArticles = recentArticlesRes.rows;
+    
+    const topicStatsRes = await pool.query('SELECT topic, COUNT(*)::int as count FROM articles GROUP BY topic');
+    const topicStats = topicStatsRes.rows;
     
     res.json({
       totalArticles,
@@ -300,28 +240,19 @@ app.get('/api/admin/stats', authenticateAdmin, (req, res) => {
 });
 
 // Admin User Management
-app.get('/api/admin/users', authenticateAdmin, (req, res) => {
+app.get('/api/admin/users', authenticateAdmin, async (req, res) => {
   try {
-    const users = db.admin_users
-      .map(u => ({
-        id: u.id,
-        username: u.username,
-        email: u.email,
-        full_name: u.full_name,
-        role: u.role,
-        created_at: u.created_at,
-        last_login: u.last_login
-      }))
-      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    
-    res.json(users);
+    const result = await pool.query(
+      'SELECT id, username, email, full_name, role, created_at, last_login FROM admin_users ORDER BY created_at DESC'
+    );
+    res.json(result.rows);
   } catch (error) {
     console.error('Error fetching admin users:', error);
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 });
 
-app.post('/api/admin/users', authenticateAdmin, requireSuperAdmin, (req, res) => {
+app.post('/api/admin/users', authenticateAdmin, requireSuperAdmin, async (req, res) => {
   try {
     const { username, password, email, full_name, role } = req.body;
     
@@ -330,57 +261,40 @@ app.post('/api/admin/users', authenticateAdmin, requireSuperAdmin, (req, res) =>
     }
     
     // Check for existing username or email
-    if (db.admin_users.some(u => u.username === username || u.email === email)) {
+    const check = await pool.query('SELECT 1 FROM admin_users WHERE username = $1 OR email = $2', [username, email]);
+    if (check.rows.length > 0) {
       return res.status(400).json({ error: 'Username or email already exists' });
     }
     
     const hashedPassword = bcrypt.hashSync(password, 10);
-    const newId = Math.max(...db.admin_users.map(u => u.id), 0) + 1;
     
-    const newUser = {
-      id: newId,
-      username,
-      password: hashedPassword,
-      email,
-      full_name,
-      role: role || 'admin',
-      created_at: new Date().toISOString(),
-      last_login: null
-    };
+    const insert = await pool.query(
+      `INSERT INTO admin_users (username, password, email, full_name, role)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING id, username, email, full_name, role, created_at`,
+      [username, hashedPassword, email, full_name, role || 'admin']
+    );
     
-    db.admin_users.push(newUser);
-    saveDb();
-    
-    res.status(201).json({
-      id: newUser.id,
-      username: newUser.username,
-      email: newUser.email,
-      full_name: newUser.full_name,
-      role: newUser.role,
-      created_at: newUser.created_at
-    });
+    res.status(201).json(insert.rows[0]);
   } catch (error) {
     console.error('Error creating admin user:', error);
     res.status(500).json({ error: 'Failed to create user' });
   }
 });
 
-app.delete('/api/admin/users/:id', authenticateAdmin, requireSuperAdmin, (req, res) => {
+app.delete('/api/admin/users/:id', authenticateAdmin, requireSuperAdmin, async (req, res) => {
   try {
-    const userId = parseInt(req.params.id);
+    const userId = parseInt(req.params.id, 10);
     
     if (req.admin.id === userId) {
       return res.status(400).json({ error: 'Cannot delete yourself' });
     }
     
-    const userIndex = db.admin_users.findIndex(u => u.id === userId);
+    const result = await pool.query('DELETE FROM admin_users WHERE id = $1', [userId]);
     
-    if (userIndex === -1) {
+    if (result.rowCount === 0) {
       return res.status(404).json({ error: 'User not found' });
     }
-    
-    db.admin_users.splice(userIndex, 1);
-    saveDb();
     
     res.json({ message: 'User deleted successfully' });
   } catch (error) {
@@ -392,33 +306,37 @@ app.delete('/api/admin/users/:id', authenticateAdmin, requireSuperAdmin, (req, r
 // API Routes
 
 // GET all articles
-app.get('/api/articles', (req, res) => {
+app.get('/api/articles', async (req, res) => {
   try {
     const { topic, lang, search } = req.query;
     
-    let articles = [...db.articles];
+    let queryText = 'SELECT * FROM articles WHERE 1=1';
+    const params = [];
+    let paramIndex = 1;
 
     if (topic) {
-      articles = articles.filter(a => a.topic === topic);
+      queryText += ` AND topic = $${paramIndex}`;
+      params.push(topic);
+      paramIndex++;
     }
 
     if (lang) {
-      articles = articles.filter(a => a.lang === lang);
+      queryText += ` AND lang = $${paramIndex}`;
+      params.push(lang);
+      paramIndex++;
     }
 
     if (search) {
-      const searchTerm = search.toLowerCase();
-      articles = articles.filter(a => 
-        a.title.toLowerCase().includes(searchTerm) ||
-        a.excerpt.toLowerCase().includes(searchTerm) ||
-        a.body.toLowerCase().includes(searchTerm)
-      );
+      queryText += ` AND (title ILIKE $${paramIndex} OR excerpt ILIKE $${paramIndex} OR body ILIKE $${paramIndex})`;
+      params.push(`%${search}%`);
+      paramIndex++;
     }
 
-    articles.sort((a, b) => new Date(b.date) - new Date(a.date));
+    queryText += ' ORDER BY date DESC';
+
+    const result = await pool.query(queryText, params);
     
-    // Parse tags back to array
-    const articlesWithTags = articles.map(a => ({
+    const articlesWithTags = result.rows.map(a => ({
       ...a,
       tags: parseTags(a.tags)
     }));
@@ -431,15 +349,15 @@ app.get('/api/articles', (req, res) => {
 });
 
 // GET single article
-app.get('/api/articles/:id', (req, res) => {
+app.get('/api/articles/:id', async (req, res) => {
   try {
-    const article = { ...db.articles.find(a => a.id === req.params.id) };
+    const result = await pool.query('SELECT * FROM articles WHERE id = $1', [req.params.id]);
     
-    if (!article || Object.keys(article).length === 0) {
+    if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Article not found' });
     }
 
-    // Parse tags back to array
+    const article = result.rows[0];
     article.tags = parseTags(article.tags);
     
     res.json(article);
@@ -450,7 +368,7 @@ app.get('/api/articles/:id', (req, res) => {
 });
 
 // POST create article (requires authentication)
-app.post('/api/articles', authenticateAdmin, (req, res) => {
+app.post('/api/articles', authenticateAdmin, async (req, res) => {
   try {
     const { id, topic, title, excerpt, body, author, tags, date, lang, image } = req.body;
     
@@ -459,28 +377,18 @@ app.post('/api/articles', authenticateAdmin, (req, res) => {
     }
 
     const articleId = id || 'a' + Date.now();
-    const tagsStr = Array.isArray(tags) ? tags.join(',') : tags;
+    const tagsArray = Array.isArray(tags) ? tags : parseTags(tags);
     const articleDate = date || new Date().toISOString().split('T')[0];
     const articleLang = lang || 'en';
 
-    const newArticle = {
-      id: articleId,
-      topic,
-      title,
-      excerpt,
-      body,
-      author,
-      tags: tagsStr,
-      date: articleDate,
-      lang: articleLang,
-      image: image || '',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
+    const result = await pool.query(
+      `INSERT INTO articles (id, topic, title, excerpt, body, author, tags, date, lang, image)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+       RETURNING *`,
+      [articleId, topic, title, excerpt, body, author, tagsArray, articleDate, articleLang, image || '']
+    );
 
-    db.articles.push(newArticle);
-    saveDb();
-
+    const newArticle = result.rows[0];
     newArticle.tags = parseTags(newArticle.tags);
 
     res.status(201).json(newArticle);
@@ -491,34 +399,25 @@ app.post('/api/articles', authenticateAdmin, (req, res) => {
 });
 
 // PUT update article (requires authentication)
-app.put('/api/articles/:id', authenticateAdmin, (req, res) => {
+app.put('/api/articles/:id', authenticateAdmin, async (req, res) => {
   try {
     const { topic, title, excerpt, body, author, tags, lang, image } = req.body;
     
-    const tagsStr = Array.isArray(tags) ? tags.join(',') : tags;
+    const tagsArray = Array.isArray(tags) ? tags : parseTags(tags);
 
-    const articleIndex = db.articles.findIndex(a => a.id === req.params.id);
+    const result = await pool.query(
+      `UPDATE articles 
+       SET topic = $1, title = $2, excerpt = $3, body = $4, author = $5, tags = $6, lang = $7, image = $8, updated_at = NOW()
+       WHERE id = $9
+       RETURNING *`,
+      [topic, title, excerpt, body, author, tagsArray, lang, image || '', req.params.id]
+    );
 
-    if (articleIndex === -1) {
+    if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Article not found' });
     }
 
-    db.articles[articleIndex] = {
-      ...db.articles[articleIndex],
-      topic,
-      title,
-      excerpt,
-      body,
-      author,
-      tags: tagsStr,
-      lang,
-      image: image || '',
-      updated_at: new Date().toISOString()
-    };
-
-    saveDb();
-
-    const updatedArticle = { ...db.articles[articleIndex] };
+    const updatedArticle = result.rows[0];
     updatedArticle.tags = parseTags(updatedArticle.tags);
 
     res.json(updatedArticle);
@@ -529,16 +428,13 @@ app.put('/api/articles/:id', authenticateAdmin, (req, res) => {
 });
 
 // DELETE article (requires authentication)
-app.delete('/api/articles/:id', authenticateAdmin, (req, res) => {
+app.delete('/api/articles/:id', authenticateAdmin, async (req, res) => {
   try {
-    const articleIndex = db.articles.findIndex(a => a.id === req.params.id);
+    const result = await pool.query('DELETE FROM articles WHERE id = $1', [req.params.id]);
 
-    if (articleIndex === -1) {
+    if (result.rowCount === 0) {
       return res.status(404).json({ error: 'Article not found' });
     }
-
-    db.articles.splice(articleIndex, 1);
-    saveDb();
 
     res.json({ message: 'Article deleted successfully' });
   } catch (error) {
@@ -548,26 +444,21 @@ app.delete('/api/articles/:id', authenticateAdmin, (req, res) => {
 });
 
 // GET topics statistics
-app.get('/api/stats', (req, res) => {
+app.get('/api/stats', async (req, res) => {
   try {
-    const topicCounts = {};
-    db.articles.forEach(article => {
-      topicCounts[article.topic] = (topicCounts[article.topic] || 0) + 1;
-    });
+    const totalRes = await pool.query('SELECT COUNT(*) FROM articles');
+    const total = parseInt(totalRes.rows[0].count, 10);
 
-    const topicStats = Object.entries(topicCounts).map(([topic, count]) => ({ topic, count }));
+    const byTopicRes = await pool.query('SELECT topic, COUNT(*)::int as count FROM articles GROUP BY topic');
+    const byTopic = byTopicRes.rows;
 
-    const langCounts = {};
-    db.articles.forEach(article => {
-      langCounts[article.lang] = (langCounts[article.lang] || 0) + 1;
-    });
-
-    const langStats = Object.entries(langCounts).map(([lang, count]) => ({ lang, count }));
+    const byLangRes = await pool.query('SELECT lang, COUNT(*)::int as count FROM articles GROUP BY lang');
+    const byLang = byLangRes.rows;
 
     res.json({
-      total: db.articles.length,
-      byTopic: topicStats,
-      byLang: langStats
+      total,
+      byTopic,
+      byLang
     });
   } catch (error) {
     console.error('Error fetching stats:', error);
@@ -578,5 +469,5 @@ app.get('/api/stats', (req, res) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`HealthPulse SL server running on http://localhost:${PORT}`);
-  console.log(`Database: ${DATA_FILE}`);
+  console.log(`Database (Neon PostgreSQL): Connected`);
 });
