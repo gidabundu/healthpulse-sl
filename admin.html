@@ -238,78 +238,136 @@
           </table>
         </div>
       </section>
+      
+      <!-- Section for Full-Screen Article Edit Workspace -->
+      <section id="section-article-edit" class="content-section">
+        <div class="section-header">
+          <h2 id="article-modal-title">Write Article</h2>
+          <button type="button" class="btn btn-ghost" onclick="navigateTo('articles')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Back to Articles
+          </button>
+        </div>
+        
+        <div class="editor-workspace-grid">
+          <!-- Left Column: Edit Form -->
+          <form id="article-form" class="editor-form-pane">
+            <div class="editor-form-row">
+              <div class="form-group flex-1">
+                <label for="article-title">Title</label>
+                <input type="text" id="article-title" name="title" required placeholder="Enter article title"/>
+                <small class="char-counter" id="title-char-count">0/120</small>
+              </div>
+              <div class="form-group width-30">
+                <label for="article-topic">Topic</label>
+                <select id="article-topic" name="topic" required>
+                  <option value="malaria">Malaria</option>
+                  <option value="maternal">Maternal Health</option>
+                  <option value="nutrition">Nutrition</option>
+                  <option value="water">Water & Sanitation</option>
+                  <option value="hiv">HIV/AIDS</option>
+                  <option value="vaccination">Vaccination</option>
+                  <option value="mentalhealth">Mental Health</option>
+                  <option value="tuberculosis">Tuberculosis</option>
+                  <option value="diabetes">Diabetes</option>
+                  <option value="hypertension">Hypertension</option>
+                  <option value="cholera">Cholera</option>
+                  <option value="familyplanning">Family Planning</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="editor-form-row">
+              <div class="form-group flex-1">
+                <label for="article-author">Author</label>
+                <input type="text" id="article-author" name="author" placeholder="Author name"/>
+              </div>
+              <div class="form-group flex-1">
+                <label for="article-date">Date</label>
+                <input type="date" id="article-date" name="date" required/>
+              </div>
+              <div class="form-group flex-1">
+                <label for="article-lang">Language</label>
+                <select id="article-lang" name="lang" required>
+                  <option value="en">English</option>
+                  <option value="kr">Krio</option>
+                  <option value="tm">Temne</option>
+                  <option value="mn">Mende</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="article-excerpt">Excerpt / Summary (max 280 characters)</label>
+              <textarea id="article-excerpt" name="excerpt" rows="2" required placeholder="Short summary of the article..."></textarea>
+              <small class="char-counter" id="excerpt-char-count">0/280</small>
+            </div>
+            
+            <div class="editor-form-row align-end">
+              <div class="form-group flex-1">
+                <label for="article-image">Illustration Image URL</label>
+                <input type="url" id="article-image" name="image" placeholder="Paste custom URL or select local asset below..."/>
+              </div>
+              <div class="form-group flex-1">
+                <label for="local-image-selector">Local Illustration Picker</label>
+                <select id="local-image-selector">
+                  <option value="">-- Choose local image --</option>
+                  <option value="images/malaria.jpg">Malaria Infographic (malaria.jpg)</option>
+                  <option value="images/cholera.jpg">Cholera Infographic (cholera.jpg)</option>
+                  <option value="images/typhoid.png">Typhoid Infographic (typhoid.png)</option>
+                  <option value="images/hiv.jpg">HIV/AIDS Infographic (hiv.jpg)</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="article-tags">Tags (comma separated)</label>
+              <input type="text" id="article-tags" name="tags" placeholder="e.g. prevention, symptoms, kids"/>
+            </div>
+            
+            <div class="form-group">
+              <label for="article-body">Body Content</label>
+              <textarea id="article-body" name="body" rows="12" required placeholder="Write full article here..."></textarea>
+              <small class="char-counter" id="body-char-count">0 characters</small>
+            </div>
+            
+            <div class="editor-actions">
+              <button type="button" class="btn btn-ghost" onclick="navigateTo('articles')">Cancel & Discard</button>
+              <button type="submit" class="btn btn-primary" id="save-article-btn">Save Article</button>
+            </div>
+          </form>
+          
+          <!-- Right Column: Live Preview & Guideline Checks -->
+          <div class="editor-preview-pane">
+            <div class="preview-header">Live Workspace Preview</div>
+            
+            <!-- Live Validation Panel -->
+            <div class="preview-validation-box" id="validation-checks-panel">
+              <div class="validation-title">📋 MoH / WHO Guideline Checks</div>
+              <div class="validation-list" id="validation-rules-list">
+                <!-- Dynamically generated warnings -->
+              </div>
+            </div>
+            
+            <div class="preview-canvas">
+              <!-- Rendered Public Page Preview -->
+              <div class="preview-article-header-banner" id="p-header-banner"></div>
+              <div class="preview-article-body">
+                <div class="preview-badge" id="p-badge">Topic</div>
+                <h1 class="preview-title" id="p-title">Article Title</h1>
+                <div class="preview-meta" id="p-meta">Date · Author · Language</div>
+                <div class="preview-image-container" id="p-image-container" style="display:none;">
+                  <img id="p-image" src="" alt="Article image"/>
+                </div>
+                <div class="preview-excerpt" id="p-excerpt">Short summary text...</div>
+                <div class="preview-body-content" id="p-body">Article content...</div>
+                <div class="preview-tags-list" id="p-tags"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
-  </div>
-
-  <!-- Modal for Add/Edit Article -->
-  <div id="article-modal" class="modal" style="display:none;">
-    <div class="modal-overlay"></div>
-    <div class="modal-content article-modal-content">
-      <div class="modal-header">
-        <h3 id="article-modal-title">Add New Article</h3>
-        <button class="modal-close">&times;</button>
-      </div>
-      <form id="article-form" class="modal-body">
-        <div class="form-group">
-          <label for="article-title">Title</label>
-          <input type="text" id="article-title" name="title" required/>
-        </div>
-        <div class="form-group">
-          <label for="article-topic">Topic</label>
-          <select id="article-topic" name="topic" required>
-            <option value="malaria">Malaria</option>
-            <option value="maternal">Maternal Health</option>
-            <option value="nutrition">Nutrition</option>
-            <option value="water">Water & Sanitation</option>
-            <option value="hiv">HIV/AIDS</option>
-            <option value="vaccination">Vaccination</option>
-            <option value="mentalhealth">Mental Health</option>
-            <option value="tuberculosis">Tuberculosis</option>
-            <option value="diabetes">Diabetes</option>
-            <option value="hypertension">Hypertension</option>
-            <option value="cholera">Cholera</option>
-            <option value="familyplanning">Family Planning</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="article-excerpt">Excerpt</label>
-          <textarea id="article-excerpt" name="excerpt" rows="3" required></textarea>
-        </div>
-        <div class="form-group">
-          <label for="article-body">Body</label>
-          <textarea id="article-body" name="body" rows="8" required></textarea>
-        </div>
-        <div class="form-group">
-          <label for="article-image">Illustration Image URL</label>
-          <input type="url" id="article-image" name="image" placeholder="Optional. e.g. https://images.unsplash.com/..."/>
-        </div>
-        <div class="form-group">
-          <label for="article-author">Author</label>
-          <input type="text" id="article-author" name="author" placeholder="Optional"/>
-        </div>
-        <div class="form-group">
-          <label for="article-tags">Tags</label>
-          <input type="text" id="article-tags" name="tags" placeholder="Comma-separated tags"/>
-        </div>
-        <div class="form-group">
-          <label for="article-date">Date</label>
-          <input type="date" id="article-date" name="date" required/>
-        </div>
-        <div class="form-group">
-          <label for="article-lang">Language</label>
-          <select id="article-lang" name="lang" required>
-            <option value="en">English</option>
-            <option value="kr">Krio</option>
-            <option value="tm">Temne</option>
-            <option value="mn">Mende</option>
-          </select>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-ghost modal-close">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save Article</button>
-        </div>
-      </form>
-    </div>
   </div>
 
   <!-- Modal for Add/Edit User -->

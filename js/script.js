@@ -307,6 +307,7 @@ async function apiDeleteArticle(id){
 let STATE={
   articles:[],lang:'en',search:'',activeTopic:null,sort:'newest',
   modal:null,toasts:[],
+  view:'grid',currentArticleId:null,
   botOpen:false,         // HealthBot panel open
   botMessages:[],        // [{role:'bot'|'user', text}]
   botTyping:false,
@@ -565,14 +566,25 @@ function render(){
 
 function buildHTML(){
   const counts=topicCounts();const filtered=filteredArticles();
-  return`${STATE.loading?`<div class="loading-overlay" role="alert" aria-live="polite"><div class="spinner-lg"></div><p>${STATE.loadingMessage||'Loading...'}</p></div>`:''}
-${buildTopbar()}${buildLangStrip()}${buildHero()}
+  const showHero = STATE.view !== 'article';
+  
+  let mainContentHTML = '';
+  if (STATE.view === 'article' && STATE.currentArticleId) {
+    mainContentHTML = buildArticlePage();
+  } else {
+    mainContentHTML = `
+      ${buildMainToolbar()}
+      <div class="articles-meta" aria-live="polite">${t('showing')} <span>${filtered.length}</span> ${t('of')} <span>${STATE.articles.length}</span> ${t('articles')}</div>
+      ${filtered.length===0?buildEmptyState():buildGrid(filtered)}
+    `;
+  }
+
+  return `${STATE.loading?`<div class="loading-overlay" role="alert" aria-live="polite"><div class="spinner-lg"></div><p>${STATE.loadingMessage||'Loading...'}</p></div>`:''}
+${buildTopbar()}${buildLangStrip()}${showHero?buildHero():''}
 <div class="layout"><div class="layout-grid">
   ${buildSidebar(counts)}
   <div role="main">
-    ${buildMainToolbar()}
-    <div class="articles-meta" aria-live="polite">${t('showing')} <span>${filtered.length}</span> ${t('of')} <span>${STATE.articles.length}</span> ${t('articles')}</div>
-    ${filtered.length===0?buildEmptyState():buildGrid(filtered)}
+    ${mainContentHTML}
   </div>
 </div></div>
 ${buildFooter()}${buildToasts()}
@@ -665,19 +677,40 @@ function buildHero(){
 // ── SIDEBAR ───────────────────────────────────────────
 function buildSidebar(counts){
   const total=STATE.articles.length;
+  const primaryTopics=['malaria','cholera','hiv','maternal','water','nutrition'];
+  const otherTopics=TOPIC_IDS.filter(id=>!primaryTopics.includes(id));
+  
+  const renderTag=(id)=>{
+    const s=topicStyle(id);const active=STATE.activeTopic===id;
+    return`<button class="filter-tag${active?' active':''}" data-action="topic" data-topic="${id}" aria-label="Filter by ${topicLabel(id)}"
+      style="${active?`background:${s.color};border-color:${s.color};`:''}">${topicEmoji(id)} ${topicLabel(id)} (${counts[id]||0})</button>`;
+  };
+
   return`<aside class="sidebar" role="navigation" aria-label="Filter by topic">
   <div class="sidebar-head"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> ${t('filterHeading')}</div>
+  
   <div class="sidebar-section">
     <label>${t('allTopicsLabel')}</label>
     <button class="filter-tag${!STATE.activeTopic?' active':''}" data-action="topic" data-topic="" aria-label="Show all topics">${t('allTopicsLabel')} (${total})</button>
   </div>
+  
   <div class="sidebar-section">
     <label>${t('categoryLabel')}</label>
-    ${TOPIC_IDS.map(id=>{const s=topicStyle(id);const active=STATE.activeTopic===id;
-      return`<button class="filter-tag${active?' active':''}" data-action="topic" data-topic="${id}" aria-label="Filter by ${topicLabel(id)}"
-        style="${active?`background:${s.color};border-color:${s.color};`:''}">${topicEmoji(id)} ${topicLabel(id)} (${counts[id]||0})</button>`;
-    }).join('')}
+    <div class="sidebar-topics-primary">
+      ${primaryTopics.map(renderTag).join('')}
+    </div>
+    
+    <details class="sidebar-other-topics" ${otherTopics.includes(STATE.activeTopic)?'open':''}>
+      <summary class="other-topics-summary">
+        <span>Other Topics</span>
+        <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </summary>
+      <div class="other-topics-content">
+        ${otherTopics.map(renderTag).join('')}
+      </div>
+    </details>
   </div>
+  
   <div class="sidebar-section">
     <label>Favorites</label>
     <button class="filter-tag${STATE.showFavoritesOnly?' active':''}" data-action="toggle-favorites-filter" aria-expanded="${STATE.showFavoritesOnly?'true':'false'}" aria-pressed="${STATE.showFavoritesOnly?'true':'false'}">
@@ -685,15 +718,10 @@ function buildSidebar(counts){
       ${STATE.showFavoritesOnly?'Show All':'Favorites Only'} (${STATE.favorites.length})
     </button>
   </div>
+  
   <div class="ai-sidebar-section">
     <div class="ai-sidebar-title"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg> ${t('aiSidebarTitle')}</div>
     <button class="ai-quick-btn" data-action="open-bot" aria-label="Open HealthBot"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> ${t('botName')}</button>
-    <button class="ai-quick-btn" data-action="ai-sidebar-write" aria-label="Generate article with AI"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> ${t('aiWriteBtn')}</button>
-  </div>
-  <div class="sidebar-stats">
-    <label style="font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:8px;">${t('statsHeading')}</label>
-    ${TOPIC_IDS.filter(id=>counts[id]).map(id=>`
-    <div class="sidebar-stat-row"><span>${topicEmoji(id)} ${topicLabel(id)}</span><span class="val">${counts[id]}</span></div>`).join('')}
   </div>
 </aside>`;
 }
@@ -708,7 +736,6 @@ function buildMainToolbar(){
       <option value="az"${STATE.sort==='az'?' selected':''}>${t('sortAZ')}</option>
     </select>
   </label>
-  <button class="btn btn-primary" data-action="create">${t('createBtn')}</button>
 </div>`;
 }
 
@@ -749,8 +776,6 @@ function buildCard(a){
     <span class="card-date"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> ${fmtDate(a.date)}</span>
     <div class="card-actions">
       <button class="icon-btn bookmark${isFav?' active':''}" data-action="toggle-favorite" data-id="${a.id}" title="${isFav?'Remove from favorites':'Add to favorites'}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="${isFav?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
-      <button class="icon-btn edit" data-action="edit" data-id="${a.id}" title="${t('editBtn')}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-      <button class="icon-btn del" data-action="confirmdelete" data-id="${a.id}" title="${t('deleteBtn')}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
     </div>
   </div>
 </div>`;
@@ -888,6 +913,115 @@ function buildFormModal(article){
 </div>`;
 }
 
+// ── DEDICATED ARTICLE READING PAGE ────────────────────
+function buildArticlePage(){
+  const a=STATE.articles.find(item=>item.id===STATE.currentArticleId);
+  if(!a) {
+    STATE.view = 'grid';
+    STATE.currentArticleId = null;
+    return '';
+  }
+  
+  const s=topicStyle(a.topic);const resolved=resolveArticle(a,STATE.lang);
+  const curLangName=LANGS.find(l=>l.code===STATE.lang)?.label||'English';
+  const langName=LANGS.find(l=>l.code===a.lang)?.label||'English';
+  
+  const fallback=resolved.isFallback
+    ?`<div class="translation-fallback" role="note" aria-live="polite">${t('fallbackNotice').replace('{lang}',`<strong>${curLangName}</strong>`)}</div>`:'';
+
+  const bodyHtml=nl2p(resolved.body);
+
+  const summarySection=STATE.aiSummary?.articleId===a.id
+    ?`<div class="ai-summary-box">
+        <div class="ai-summary-head"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a9 9 0 0 0-9 9v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2v-4a2 2 0 0 1 4 0v4a2 2 0 0 0 2 2h4c1.1 0 2-.9 2-2v-7a9 9 0 0 0-9-9z"/><path d="M9 9h6"/></svg> ${t('aiSummaryTitle')}</div>
+        ${STATE.aiSummary.loading
+          ?`<div style="display:flex;align-items:center;gap:8px;color:var(--green-mid);font-size:.85rem;"><span class="spinner"></span> Summarising...</div>`
+          :`<div class="ai-summary-body">${nl2p(STATE.aiSummary.text)}</div>`}
+      </div>`:'';
+
+  const transSection=STATE.aiTranslation?.articleId===a.id
+    ?`<div class="ai-translate-box">
+        <div class="ai-translate-head"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> ${t('aiTranslateTitle')} — ${LANGS.find(l=>l.code===STATE.aiTranslation.lang)?.label||''}</div>
+        ${STATE.aiTranslation.loading
+          ?`<div style="display:flex;align-items:center;gap:8px;color:var(--green-mid);font-size:.85rem;"><span class="spinner"></span> ${t('aiTranslating')}</div>`
+          :`<div class="ai-translate-body">${nl2p(STATE.aiTranslation.text)}</div>`}
+      </div>`:'';
+
+  const otherLangs=LANGS.filter(l=>l.code!=='en'&&l.code!==STATE.lang&&!ARTICLE_TRANSLATIONS[a.id]?.[l.code]);
+  const transButtons=otherLangs.length
+    ?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+        <span style="font-size:.75rem;color:var(--muted);font-weight:600;align-self:center;">AI Translate:</span>
+        ${otherLangs.map(l=>`<button class="btn btn-ai-outline btn-sm" data-action="ai-translate" data-id="${a.id}" data-lang="${l.code}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> ${l.label}</button>`).join('')}
+      </div>`:'';
+
+  const bannerContent=a.image 
+    ? `<div class="read-image-container"><img class="read-image" src="${a.image}" alt="${esc(resolved.title)}" onerror="this.style.display='none'; this.parentElement.style.height='6px'; this.parentElement.style.background='${s.color}'"/></div>`
+    : `<div class="read-banner" style="background:${s.color}"></div>`;
+
+  const related = STATE.articles
+    .filter(item => item.id !== a.id)
+    .sort((x, y) => {
+      if (x.topic === a.topic && y.topic !== a.topic) return -1;
+      if (x.topic !== a.topic && y.topic === a.topic) return 1;
+      return new Date(y.date) - new Date(x.date);
+    })
+    .slice(0, 3);
+
+  const relatedHtml = related.length 
+    ? `<div class="related-section">
+        <h3 class="related-section-title">Recommended Articles</h3>
+        <div class="related-grid">
+          ${related.map(item => {
+            const itemStyle = topicStyle(item.topic);
+            const itemResolved = resolveArticle(item, STATE.lang);
+            return `
+              <div class="related-card" data-action="read" data-id="${item.id}" tabindex="0">
+                ${item.image 
+                  ? `<div class="related-card-image-container"><img class="related-card-image" src="${item.image}" alt="${esc(itemResolved.title)}"/></div>` 
+                  : `<div class="related-card-banner" style="background:${itemStyle.color}"></div>`
+                }
+                <div class="related-card-body">
+                  <div class="related-card-topic" style="background:${itemStyle.bg};color:${itemStyle.color}">${topicEmoji(item.topic)} ${topicLabel(item.topic)}</div>
+                  <div class="related-card-title">${esc(itemResolved.title)}</div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>`
+    : '';
+
+  return `<div class="article-page">
+    <button class="btn btn-ghost btn-back" data-action="back-to-grid" style="margin-bottom:24px; display:inline-flex; align-items:center; gap:8px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to Articles
+    </button>
+    <div class="article-page-content read">
+      ${bannerContent}
+      <div class="read-content">
+        ${fallback}
+        <div class="read-topic" style="background:${s.bg};color:${s.color}">${topicEmoji(a.topic)} ${topicLabel(a.topic)}</div>
+        <h1 class="read-title">${esc(resolved.title)}</h1>
+        <div class="read-meta">
+          <span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> ${t('metaDate')}: ${fmtDate(a.date)}</span>
+          ${a.author?`<span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg> ${t('metaAuthor')}: ${esc(a.author)}</span>`:''}
+          <span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> ${resolved.isTranslated&&STATE.lang!=='en'?curLangName:langName}</span>
+          ${resolved.isTranslated&&STATE.lang!=='en'?`<span class="lang-badge translated"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> ${curLangName}</span>`:''}
+        </div>
+        <div class="read-body">${bodyHtml}</div>
+        ${summarySection}
+        ${transSection}
+        ${transButtons}
+        ${a.tags?.length?`<div class="read-tags">${a.tags.map(tag=>`<span class="tag-pill">#${esc(tag)}</span>`).join('')}</div>`:''}
+      </div>
+      <div class="read-footer" style="border-top:1px solid var(--border-color);margin-top:30px;padding-top:20px;display:flex;justify-content:flex-end;gap:12px;">
+        <button class="btn btn-ai-outline btn-sm" data-action="ai-summarize" data-id="${a.id}">${t('aiSummaryBtn')}</button>
+      </div>
+    </div>
+    ${relatedHtml}
+  </div>`;
+}
+
 // ── READ MODAL WITH AI TOOLS ──────────────────────────
 function buildReadModal(a){
   if(!a)return'';
@@ -985,7 +1119,7 @@ function attachEvents(){
   // General data-action delegation
   document.querySelectorAll('[data-action]').forEach(el=>{
     const action=el.dataset.action;
-    if(action==='search'){el.addEventListener('input',e=>{STATE.search=e.target.value;render();});return;}
+    if(action==='search'){el.addEventListener('input',e=>{STATE.view='grid';STATE.currentArticleId=null;STATE.search=e.target.value;render();});return;}
     if(action==='sort'){el.addEventListener('change',e=>{STATE.sort=e.target.value;render();});return;}
     el.addEventListener('click',e=>{e.stopPropagation();handleAction(action,el.dataset,el);});
     if(el.classList.contains('article-card')){
@@ -1121,8 +1255,8 @@ async function handleAction(action,data,el){
   if(action==='setlang'){STATE.lang=data.lang;STATE.aiSummary=null;STATE.aiTranslation=null;STATE.mobileMenuOpen=false;render();return;}
   if(action==='toggle-darkmode'){STATE.darkMode=!STATE.darkMode;localStorage.setItem('healthpulse-darkmode',STATE.darkMode);render();return;}
   if(action==='toggle-mobile-menu'){STATE.mobileMenuOpen=!STATE.mobileMenuOpen;render();return;}
-  if(action==='topic'){STATE.activeTopic=data.topic||null;STATE.mobileMenuOpen=false;render();return;}
-  if(action==='toggle-favorites-filter'){STATE.showFavoritesOnly=!STATE.showFavoritesOnly;render();return;}
+  if(action==='topic'){STATE.view='grid';STATE.currentArticleId=null;STATE.activeTopic=data.topic||null;STATE.mobileMenuOpen=false;render();return;}
+  if(action==='toggle-favorites-filter'){STATE.view='grid';STATE.currentArticleId=null;STATE.showFavoritesOnly=!STATE.showFavoritesOnly;render();return;}
   if(action==='admin-logout'){
     localStorage.removeItem('adminToken');
     localStorage.removeItem('adminData');
@@ -1141,7 +1275,8 @@ async function handleAction(action,data,el){
     return;
   }
   if(action==='create'){STATE.modal={type:'create'};STATE.aiTagSuggestions=[];STATE.aiGenerating=false;STATE.mobileMenuOpen=false;render();return;}
-  if(action==='read'){STATE.modal={type:'read',id:data.id};STATE.aiSummary=null;STATE.aiTranslation=null;STATE.mobileMenuOpen=false;render();return;}
+  if(action==='read'){STATE.view='article';STATE.currentArticleId=data.id;STATE.aiSummary=null;STATE.aiTranslation=null;STATE.mobileMenuOpen=false;render();return;}
+  if(action==='back-to-grid'){STATE.view='grid';STATE.currentArticleId=null;render();return;}
   if(action==='edit'){STATE.modal={type:'edit',id:data.id};STATE.aiTagSuggestions=[];STATE.aiGenerating=false;STATE.mobileMenuOpen=false;render();return;}
   if(action==='confirmdelete'){STATE.modal={type:'delete',id:data.id};render();return;}
   if(action==='delete'){deleteArticle(data.id);return;}

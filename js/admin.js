@@ -108,7 +108,30 @@ function setupEventListeners() {
         closeModal(modal.id);
       }
     });
+  // Live Editor Preview Listeners
+  const editorFields = [
+    'article-title', 'article-topic', 'article-author', 'article-date', 
+    'article-lang', 'article-excerpt', 'article-image', 'article-tags', 'article-body'
+  ];
+  editorFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', updateEditorPreview);
+      el.addEventListener('change', updateEditorPreview);
+    }
   });
+
+  // Local Image Selector change helper
+  const localImgSelect = document.getElementById('local-image-selector');
+  if (localImgSelect) {
+    localImgSelect.addEventListener('change', (e) => {
+      const val = e.target.value;
+      if (val) {
+        document.getElementById('article-image').value = val;
+        updateEditorPreview();
+      }
+    });
+  }
 }
 
 // Show Login Screen
@@ -249,7 +272,8 @@ function navigateTo(section) {
   const titles = {
     overview: 'Dashboard Overview',
     articles: 'Article Management',
-    users: 'User Management'
+    users: 'User Management',
+    'article-edit': 'Write Article'
   };
   document.getElementById('page-title').textContent = titles[section] || 'Dashboard';
   
@@ -454,7 +478,9 @@ function showArticleModal(article = null) {
   document.getElementById('article-date').value = article?.date || new Date().toISOString().split('T')[0];
   document.getElementById('article-lang').value = article?.lang || 'en';
 
-  openModal('article-modal');
+  document.getElementById('local-image-selector').value = '';
+  navigateTo('article-edit');
+  updateEditorPreview();
 }
 
 // Open Modal
@@ -507,7 +533,7 @@ async function handleArticleSubmit(e) {
     });
 
     if (response.ok) {
-      closeModal('article-modal');
+      navigateTo('articles');
       await loadArticles();
       await loadDashboardData();
     } else {
@@ -649,5 +675,156 @@ function closeSidebar() {
   const sidebar = document.querySelector('.sidebar');
   if (sidebar) {
     sidebar.classList.remove('open');
+  }
+}
+
+// ── EDITOR PREVIEW & VALIDATION ──────────────────────
+function updateEditorPreview() {
+  const title = document.getElementById('article-title').value || 'Article Title';
+  const topic = document.getElementById('article-topic').value || 'malaria';
+  const excerpt = document.getElementById('article-excerpt').value || 'Short summary text...';
+  const body = document.getElementById('article-body').value || 'Article content...';
+  const image = document.getElementById('article-image').value || '';
+  const author = document.getElementById('article-author').value || '';
+  const lang = document.getElementById('article-lang').value || 'en';
+  const date = document.getElementById('article-date').value || new Date().toISOString().split('T')[0];
+  const tagsText = document.getElementById('article-tags').value || '';
+
+  // Update text elements
+  document.getElementById('p-title').textContent = title;
+  document.getElementById('p-excerpt').textContent = excerpt;
+  
+  // Convert newlines to paragraphs
+  const bodyHtml = body.split('\n\n').map(p => p.trim() ? `<p>${p.replace(/\n/g, '<br/>')}</p>` : '').join('');
+  document.getElementById('p-body').innerHTML = bodyHtml || '<p>Article content...</p>';
+  
+  // Update char counters
+  document.getElementById('title-char-count').textContent = `${title.length}/120`;
+  document.getElementById('excerpt-char-count').textContent = `${excerpt.length}/280`;
+  document.getElementById('body-char-count').textContent = `${body.length} characters`;
+
+  // Update badge and colors
+  const topicsMap = {
+    malaria: { label: 'Malaria', emoji: '🦟', color: '#1A7A4A', bg: '#e6f4ee' },
+    maternal: { label: 'Maternal Health', emoji: '🤱', color: '#9B2335', bg: '#fdeaec' },
+    nutrition: { label: 'Nutrition', emoji: '🥗', color: '#E8A020', bg: '#fdf4e3' },
+    hiv: { label: 'HIV/AIDS', emoji: '🎗️', color: '#8E44AD', bg: '#f3e8fa' },
+    water: { label: 'Water & Sanitation', emoji: '💧', color: '#2471A3', bg: '#e8f4fd' },
+    mentalhealth: { label: 'Mental Health', emoji: '🧠', color: '#16A085', bg: '#e3f6f3' },
+    vaccination: { label: 'Vaccination', emoji: '💉', color: '#D35400', bg: '#fdebd0' },
+    tuberculosis: { label: 'Tuberculosis', emoji: '🫁', color: '#6B7C72', bg: '#f0f3f1' },
+    diabetes: { label: 'Diabetes', emoji: '🩸', color: '#E67E22', bg: '#fdf2e9' },
+    hypertension: { label: 'Hypertension', emoji: '❤️‍🩹', color: '#C0392B', bg: '#f9ebe7' },
+    cholera: { label: 'Cholera', emoji: '🚰', color: '#27AE60', bg: '#e9f7ef' },
+    familyplanning: { label: 'Family Planning', emoji: '👨‍👩‍👧', color: '#8E44AD', bg: '#f4ecf7' }
+  };
+  const currentTopic = topicsMap[topic] || topicsMap.malaria;
+  
+  const badge = document.getElementById('p-badge');
+  badge.textContent = `${currentTopic.emoji} ${currentTopic.label}`;
+  badge.style.background = currentTopic.bg;
+  badge.style.color = currentTopic.color;
+
+  const headerBanner = document.getElementById('p-header-banner');
+  headerBanner.style.background = currentTopic.color;
+
+  // Language name
+  const langsMap = { en: 'English', kr: 'Krio', tm: 'Temne', mn: 'Mende' };
+  const currentLang = langsMap[lang] || 'English';
+
+  // Format date
+  let dateFormatted = date;
+  try {
+    dateFormatted = new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  } catch(e){}
+
+  document.getElementById('p-meta').innerHTML = `
+    <span>📅 Date: ${dateFormatted}</span>
+    ${author ? `<span>✍️ Author: ${author}</span>` : ''}
+    <span>🌐 Language: ${currentLang}</span>
+  `;
+
+  // Image preview
+  const imgContainer = document.getElementById('p-image-container');
+  const imgEl = document.getElementById('p-image');
+  if (image) {
+    imgEl.src = image;
+    imgContainer.style.display = 'block';
+  } else {
+    imgContainer.style.display = 'none';
+  }
+
+  // Tags list
+  const tagsList = document.getElementById('p-tags');
+  tagsList.innerHTML = '';
+  if (tagsText.trim()) {
+    tagsText.split(',').map(t => t.trim()).filter(Boolean).forEach(tag => {
+      const pill = document.createElement('span');
+      pill.className = 'tag-pill';
+      pill.textContent = `#${tag}`;
+      tagsList.appendChild(pill);
+    });
+  }
+
+  // Perform WHO / MoH compliance checks
+  runComplianceChecks(title, excerpt, body, topic);
+}
+
+function runComplianceChecks(title, excerpt, body, topic) {
+  const list = document.getElementById('validation-rules-list');
+  list.innerHTML = '';
+  
+  const warnings = [];
+
+  // Rule 1: Excerpt character limit
+  if (excerpt.length > 280) {
+    warnings.push({
+      type: 'danger',
+      message: `Excerpt length (${excerpt.length} chars) exceeds the 280-character maximum limit.`
+    });
+  }
+
+  // Rule 2: Referral warning checks (WHO standard)
+  const lowerBody = body.toLowerCase();
+  const hasReferral = lowerBody.includes('doctor') || 
+                      lowerBody.includes('clinic') || 
+                      lowerBody.includes('hospital') || 
+                      lowerBody.includes('health facility') || 
+                      lowerBody.includes('health worker') || 
+                      lowerBody.includes('nurse');
+                      
+  if (!hasReferral && body.trim().length > 0) {
+    warnings.push({
+      type: 'warning',
+      message: 'MoH Standard: Article is missing a "When to see a doctor" or referral instruction. Add guidance to visit nearest health facility.'
+    });
+  }
+
+  // Rule 3: Chloroquine restriction for Malaria (PRD v3.0 risk point)
+  if (topic === 'malaria' && lowerBody.includes('chloroquine')) {
+    warnings.push({
+      type: 'danger',
+      message: 'CRITICAL WARNING: Chloroquine is NOT effective for treating malaria in Sierra Leone. Recommend ACT (Artemisinin-based Combination Therapy) instead.'
+    });
+  }
+
+  // Rule 4: Check if ACT is mentioned for Malaria (PRD v3.0 standard)
+  if (topic === 'malaria' && !lowerBody.includes('act') && !lowerBody.includes('artemisinin') && body.trim().length > 0) {
+    warnings.push({
+      type: 'warning',
+      message: 'Guideline: For malaria treatment, specify ACT (Artemisinin-based Combination Therapy) as the correct standard treatment.'
+    });
+  }
+
+  // Render warnings
+  if (warnings.length === 0) {
+    list.innerHTML = `<div class="validation-item success">✅ All MoH/WHO communications guidelines are met! Ready to publish.</div>`;
+  } else {
+    warnings.forEach(w => {
+      const div = document.createElement('div');
+      div.className = `validation-item ${w.type}`;
+      div.innerHTML = `${w.type === 'danger' ? '❌' : '⚠️'} ${w.message}`;
+      list.appendChild(div);
+    });
   }
 }
