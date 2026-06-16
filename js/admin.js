@@ -32,8 +32,22 @@ function setupEventListeners() {
   // Menu toggle for mobile
   const menuToggle = document.getElementById('menu-toggle');
   if (menuToggle) {
-    menuToggle.addEventListener('click', toggleSidebar);
+    menuToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleSidebar();
+    });
   }
+
+  // Close sidebar on click outside on mobile
+  document.addEventListener('click', (e) => {
+    const sidebar = document.querySelector('.sidebar');
+    const toggle = document.getElementById('menu-toggle');
+    if (sidebar && sidebar.classList.contains('open') && window.innerWidth <= 768) {
+      if (!sidebar.contains(e.target) && (!toggle || !toggle.contains(e.target))) {
+        closeSidebar();
+      }
+    }
+  });
   
   // Navigation
   document.querySelectorAll('.nav-item').forEach(item => {
@@ -197,11 +211,26 @@ function updateAdminInfo() {
   if (currentAdmin) {
     document.getElementById('admin-name').textContent = currentAdmin.full_name || currentAdmin.username;
     document.getElementById('admin-role').textContent = currentAdmin.role === 'superadmin' ? 'Super Admin' : 'Admin';
+    
+    // Hide or show User Management nav button
+    const usersBtn = document.querySelector('.nav-item[data-section="users"]');
+    if (usersBtn) {
+      if (currentAdmin.role === 'superadmin') {
+        usersBtn.style.display = 'flex';
+      } else {
+        usersBtn.style.display = 'none';
+      }
+    }
   }
 }
 
 // Navigate to Section
 function navigateTo(section) {
+  if (section === 'users' && (!currentAdmin || currentAdmin.role !== 'superadmin')) {
+    navigateTo('overview');
+    return;
+  }
+
   // Update nav items
   document.querySelectorAll('.nav-item').forEach(item => {
     item.classList.remove('active');
@@ -419,6 +448,7 @@ function showArticleModal(article = null) {
   document.getElementById('article-topic').value = article?.topic || 'malaria';
   document.getElementById('article-excerpt').value = article?.excerpt || '';
   document.getElementById('article-body').value = article?.body || '';
+  document.getElementById('article-image').value = article?.image || '';
   document.getElementById('article-author').value = article?.author || '';
   document.getElementById('article-tags').value = Array.isArray(article?.tags) ? article.tags.join(', ') : (article?.tags || '');
   document.getElementById('article-date').value = article?.date || new Date().toISOString().split('T')[0];
@@ -469,7 +499,10 @@ async function handleArticleSubmit(e) {
 
     const response = await fetch(url, {
       method,
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
       body: JSON.stringify(articleData)
     });
 
@@ -577,7 +610,10 @@ async function deleteArticle(articleId) {
   
   try {
     const response = await fetch(`${API_BASE}/articles/${articleId}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${authToken}`
+      }
     });
     
     if (response.ok) {

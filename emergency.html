@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="HealthPulse SL Emergency Hub — First aid guides, disease prevention, malaria treatment, fire accident response and emergency hotlines for Sierra Leone."/>
+  <meta property="og:title" content="Emergency Hub — HealthPulse SL"/>
+  <meta property="og:description" content="Life-saving first aid guides, disease prevention tips, and emergency hotlines for Sierra Leone communities."/>
+  <meta property="og:type" content="website"/>
+  <meta name="theme-color" content="#C0392B"/>
+  <link rel="canonical" href="https://healthpulse-sl.vercel.app/emergency.html"/>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💚</text></svg>"/>
+  <title>Emergency Hub — HealthPulse SL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/emergency.css"/>
+</head>
+<body>
+
+  <!-- TOPBAR -->
+  <nav class="topbar" role="banner">
+    <div class="topbar-brand">
+      <div class="topbar-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+      <div class="topbar-title">HealthPulse&nbsp;<span>SL</span></div>
+    </div>
+    <div class="topbar-right">
+      <a href="index.html" class="admin-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+      </a>
+      <a href="emergency.html" class="emergency-nav-link active">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Emergency Hub
+        <span class="emergency-dot"></span>
+      </a>
+      <a href="admin.html" class="admin-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Admin
+      </a>
+    </div>
+  </nav>
+
+  <!-- EMERGENCY HOTLINES BANNER -->
+  <div class="hotline-banner" role="alert" aria-label="Emergency contact numbers">
+    <div class="hotline-inner">
+      <div class="hotline-label">
+        <span class="pulse-ring"></span>
+        <strong>🆘 EMERGENCY HOTLINES — SIERRA LEONE</strong>
+      </div>
+      <div class="hotline-numbers">
+        <a href="tel:999" class="hotline-number" aria-label="Call National Emergency 999">
+          <span class="hotline-icon">🚑</span>
+          <span class="hotline-num">999</span>
+          <span class="hotline-type">National Emergency</span>
+        </a>
+        <a href="tel:112" class="hotline-number" aria-label="Call Ambulance 112">
+          <span class="hotline-icon">🏥</span>
+          <span class="hotline-num">112</span>
+          <span class="hotline-type">Ambulance</span>
+        </a>
+        <a href="tel:+23278000000" class="hotline-number" aria-label="Ministry of Health Hotline">
+          <span class="hotline-icon">💊</span>
+          <span class="hotline-num">MoH</span>
+          <span class="hotline-type">Health Hotline</span>
+        </a>
+        <a href="tel:019" class="hotline-number" aria-label="Fire Service 019">
+          <span class="hotline-icon">🔥</span>
+          <span class="hotline-num">019</span>
+          <span class="hotline-type">Fire Service</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="emergency-hero" role="banner">
+    <div class="emergency-hero-inner">
+      <div class="hero-eyebrow">
+        <span class="pulse-dot"></span>
+        Emergency Health Resource Centre
+      </div>
+      <h1>Emergency &amp; <em>First Aid</em> Hub</h1>
+      <p class="hero-sub">Step-by-step guides for emergencies, disease prevention, and first aid — designed for Sierra Leone communities. Save a life today.</p>
+      <div class="hero-tabs" role="tablist" aria-label="Emergency topic tabs">
+        <button class="hero-tab active" data-tab="firstaid" role="tab" aria-selected="true" id="tab-firstaid" aria-controls="panel-firstaid">🩹 First Aid</button>
+        <button class="hero-tab" data-tab="malaria" role="tab" aria-selected="false" id="tab-malaria" aria-controls="panel-malaria">🦟 Malaria Guide</button>
+        <button class="hero-tab" data-tab="diseases" role="tab" aria-selected="false" id="tab-diseases" aria-controls="panel-diseases">🦠 Disease Prevention</button>
+        <button class="hero-tab" data-tab="fire" role="tab" aria-selected="false" id="tab-fire" aria-controls="panel-fire">🔥 Fire &amp; Accidents</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="emergency-main" role="main">
+
+    <!-- ═══════════════════════════════════════════
+         TAB 1: FIRST AID
+    ═══════════════════════════════════════════ -->
+    <section id="panel-firstaid" class="tab-panel active" role="tabpanel" aria-labelledby="tab-firstaid">
+      <div class="section-header-row">
+        <h2 class="section-title">🩹 First Aid Guides</h2>
+        <p class="section-sub">Step-by-step visual guides. Follow each step carefully in an emergency.</p>
+      </div>
+
+      <!-- STOP THE BLEEDING / TOURNIQUET -->
+      <div class="guide-card" id="guide-bleeding">
+        <div class="guide-card-header bleed">
+          <div class="guide-icon-circle">🩸</div>
+          <div>
+            <h3>Stop the Bleeding — Tourniquet Guide</h3>
+            <p>Severe bleeding from a limb can be life-threatening. Act immediately.</p>
+          </div>
+          <span class="urgency-badge red">URGENT</span>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-icon">✊</div>
+            <h4>Apply Pressure</h4>
+            <p>Press firmly on the wound with a clean cloth. Do NOT remove the cloth. Keep pressing hard.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-icon">🎗️</div>
+            <h4>Tie the Tourniquet</h4>
+            <p>Place the tourniquet 2–3 inches above the wound. Pull the tail tight — as tight as possible.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-icon">🔄</div>
+            <h4>Twist to Stop Bleed</h4>
+            <p>Twist the windlass rod until the bleeding stops completely. Secure it in the triangle clasp.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <div class="step-icon">⏰</div>
+            <h4>Note the Time</h4>
+            <p>Write the exact time you applied the tourniquet on the person's skin or tourniquet. Get to a hospital IMMEDIATELY.</p>
+          </div>
+        </div>
+        <div class="guide-warning">
+          ⚠️ <strong>Important:</strong> Never remove a tourniquet once applied. Do NOT leave on for more than 2 hours. Call 999 immediately.
+        </div>
+      </div>
+
+      <!-- CPR GUIDE -->
+      <div class="guide-card" id="guide-cpr">
+        <div class="guide-card-header green">
+          <div class="guide-icon-circle">❤️</div>
+          <div>
+            <h3>CPR — Cardiopulmonary Resuscitation</h3>
+            <p>Use when someone is unconscious and not breathing normally.</p>
+          </div>
+          <span class="urgency-badge red">LIFE-SAVING</span>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-icon">👋</div>
+            <h4>Check &amp; Call</h4>
+            <p>Tap their shoulders and shout "Are you OK?" If no response, call 999 immediately. Send someone for help.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-icon">🫀</div>
+            <h4>30 Chest Compressions</h4>
+            <p>Place hands on centre of chest. Push down hard and fast — 2 inches deep. Do 30 compressions at 100–120 per minute.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-icon">💨</div>
+            <h4>2 Rescue Breaths</h4>
+            <p>Tilt head back, lift chin. Pinch nose closed. Give 2 slow breaths — each about 1 second long. Watch chest rise.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <div class="step-icon">🔁</div>
+            <h4>Repeat Until Help Arrives</h4>
+            <p>Continue 30 compressions then 2 breaths. Keep going until the person starts breathing or emergency services arrive.</p>
+          </div>
+        </div>
+        <div class="guide-warning green-warn">
+          ✅ <strong>Tip:</strong> Push to the beat of "Stayin' Alive" by Bee Gees — that's exactly 100 beats per minute.
+        </div>
+      </div>
+
+      <!-- CHOKING GUIDE -->
+      <div class="guide-card" id="guide-choking">
+        <div class="guide-card-header amber">
+          <div class="guide-icon-circle">😮</div>
+          <div>
+            <h3>Choking — Heimlich Manoeuvre</h3>
+            <p>When someone cannot breathe, cough, or speak due to something stuck in their throat.</p>
+          </div>
+          <span class="urgency-badge amber-badge">URGENT</span>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-icon">🙋</div>
+            <h4>Identify Choking</h4>
+            <p>Look for: hands at throat, cannot speak or cry, blue lips, silent cough. Ask "Are you choking?" — if yes, act now.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-icon">👊</div>
+            <h4>5 Back Blows</h4>
+            <p>Lean them forward. Give 5 firm blows between the shoulder blades with the heel of your hand. Check after each.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-icon">🫂</div>
+            <h4>5 Abdominal Thrusts</h4>
+            <p>Stand behind them. Make a fist above navel. Pull sharply inward and upward 5 times. Alternate with back blows.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <div class="step-icon">📞</div>
+            <h4>Call 999</h4>
+            <p>If they lose consciousness, lower them gently to the ground and begin CPR. Call 999 immediately.</p>
+          </div>
+        </div>
+        <div class="guide-warning">
+          ⚠️ <strong>For infants under 1 year:</strong> DO NOT use abdominal thrusts. Use 5 back blows + 5 chest thrusts only.
+        </div>
+      </div>
+
+      <!-- FEVER IN CHILDREN -->
+      <div class="guide-card" id="guide-fever">
+        <div class="guide-card-header amber">
+          <div class="guide-icon-circle">🤒</div>
+          <div>
+            <h3>High Fever in Children</h3>
+            <p>A temperature above 38°C (100.4°F) in a child requires immediate action.</p>
+          </div>
+          <span class="urgency-badge amber-badge">IMPORTANT</span>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-icon">🌡️</div>
+            <h4>Check the Temperature</h4>
+            <p>Use a thermometer. Fever = 38°C or above. Very high fever = 40°C+. Note the reading and time.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-icon">💊</div>
+            <h4>Give Paracetamol</h4>
+            <p>Give children's paracetamol (do NOT give aspirin to children). Follow the dosage on the packaging by weight.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-icon">💧</div>
+            <h4>Cool &amp; Hydrate</h4>
+            <p>Remove excess clothing. Sponge with lukewarm (not cold) water. Give plenty of fluids — water, oral rehydration salts.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <div class="step-icon">🏥</div>
+            <h4>Seek Medical Help</h4>
+            <p>Go to clinic immediately if: fever above 40°C, seizures, difficulty breathing, rash, stiff neck, or fever lasts 2+ days.</p>
+          </div>
+        </div>
+        <div class="guide-warning amber-warn">
+          🦟 <strong>Malaria Alert:</strong> In Sierra Leone, any fever in a child should be tested for malaria. Go to a clinic for a rapid test.
+        </div>
+      </div>
+
+      <!-- SNAKE BITE -->
+      <div class="guide-card" id="guide-snakebite">
+        <div class="guide-card-header bleed">
+          <div class="guide-icon-circle">🐍</div>
+          <div>
+            <h3>Snake Bite First Aid</h3>
+            <p>Sierra Leone has venomous snakes. Act quickly and calmly.</p>
+          </div>
+          <span class="urgency-badge red">URGENT</span>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-icon">🏃</div>
+            <h4>Move Away Safely</h4>
+            <p>Get the victim away from the snake immediately. Do NOT try to catch or kill the snake. Keep the victim calm and still.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-icon">⬇️</div>
+            <h4>Keep Limb Low</h4>
+            <p>Keep the bitten limb below heart level. Remove watches, rings, or tight clothing near the bite. Immobilise the limb.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-icon">🚫</div>
+            <h4>Do NOT Do These</h4>
+            <p>Do NOT cut the wound. Do NOT suck out venom. Do NOT apply tourniquet. Do NOT apply ice. Do NOT give alcohol.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <div class="step-icon">🏥</div>
+            <h4>Rush to Hospital</h4>
+            <p>Transport the victim to a hospital immediately. If you can, describe the snake's appearance to doctors. Antivenom may be needed.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         TAB 2: MALARIA GUIDE
+    ═══════════════════════════════════════════ -->
+    <section id="panel-malaria" class="tab-panel" role="tabpanel" aria-labelledby="tab-malaria">
+      <div class="section-header-row">
+        <h2 class="section-title">🦟 Complete Malaria Guide</h2>
+        <p class="section-sub">Everything you need to know about malaria — the number one killer disease in Sierra Leone.</p>
+      </div>
+
+      <!-- MALARIA STATS BANNER -->
+      <div class="malaria-stats-banner">
+        <div class="malaria-stat">
+          <span class="mal-num">#1</span>
+          <span class="mal-lbl">Killer Disease in Sierra Leone</span>
+        </div>
+        <div class="malaria-stat">
+          <span class="mal-num">~40%</span>
+          <span class="mal-lbl">of hospital visits are malaria</span>
+        </div>
+        <div class="malaria-stat">
+          <span class="mal-num">10–15</span>
+          <span class="mal-lbl">Days until symptoms appear</span>
+        </div>
+        <div class="malaria-stat">
+          <span class="mal-num">100%</span>
+          <span class="mal-lbl">Preventable with right steps</span>
+        </div>
+      </div>
+
+      <!-- ACCORDION: WHAT IS MALARIA -->
+      <div class="accordion-card" id="acc-what">
+        <button class="accordion-header open" aria-expanded="true" data-acc="what">
+          <div class="acc-icon-wrap green-bg"><span>🦠</span></div>
+          <div class="acc-header-text">
+            <strong>What is Malaria?</strong>
+            <span>Causes and how it spreads</span>
+          </div>
+          <svg class="acc-chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body show" id="acc-body-what">
+          <div class="acc-content-grid">
+            <div class="acc-info-card">
+              <h4>🧫 The Parasite</h4>
+              <p>Malaria is caused by <em>Plasmodium</em> parasites — mainly <em>P. falciparum</em> in Sierra Leone, which is the most dangerous type. The parasite lives inside red blood cells.</p>
+            </div>
+            <div class="acc-info-card">
+              <h4>🦟 The Carrier</h4>
+              <p>Only the female <em>Anopheles</em> mosquito carries malaria. She bites mainly between dusk and dawn. One bite from an infected mosquito is enough to transmit malaria.</p>
+            </div>
+            <div class="acc-info-card">
+              <h4>🔄 How it Spreads</h4>
+              <p>Mosquito bites infected person → Parasite grows in mosquito → Mosquito bites healthy person → Parasite enters bloodstream → Attacks liver then red blood cells.</p>
+            </div>
+            <div class="acc-info-card">
+              <h4>❌ How It Does NOT Spread</h4>
+              <p>Malaria does NOT spread through: touching, hugging, sharing food or water, coughing, sneezing, or casual contact. You cannot catch malaria from another person.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCORDION: SYMPTOMS -->
+      <div class="accordion-card" id="acc-symptoms">
+        <button class="accordion-header" aria-expanded="false" data-acc="symptoms">
+          <div class="acc-icon-wrap amber-bg"><span>🤒</span></div>
+          <div class="acc-header-text">
+            <strong>Symptoms of Malaria</strong>
+            <span>Know the warning signs — act fast</span>
+          </div>
+          <svg class="acc-chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body" id="acc-body-symptoms">
+          <div class="symptoms-timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot green"></div>
+              <div class="timeline-content">
+                <strong>Days 1–3 after bite</strong>
+                <p>No symptoms yet — parasite is growing silently in your liver.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot amber"></div>
+              <div class="timeline-content">
+                <strong>Days 10–15 — Early Symptoms</strong>
+                <p>High fever (38–40°C+), chills and shivering, severe headache, muscle and joint pain, fatigue and weakness, nausea and vomiting.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot red"></div>
+              <div class="timeline-content">
+                <strong>Severe Malaria — EMERGENCY</strong>
+                <p>Confusion or unconsciousness, convulsions/seizures, difficulty breathing, inability to sit up, yellow skin/eyes (jaundice), very pale skin (severe anaemia). <strong>GO TO HOSPITAL IMMEDIATELY.</strong></p>
+              </div>
+            </div>
+          </div>
+          <div class="guide-warning amber-warn">
+            🧒 <strong>Children at highest risk:</strong> Children under 5 can develop severe malaria very quickly. Any fever in a child should be tested for malaria the same day.
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCORDION: PREVENTION -->
+      <div class="accordion-card" id="acc-prevent">
+        <button class="accordion-header" aria-expanded="false" data-acc="prevent">
+          <div class="acc-icon-wrap green-bg"><span>🛡️</span></div>
+          <div class="acc-header-text">
+            <strong>How to Prevent Malaria</strong>
+            <span>Protect yourself and your family tonight</span>
+          </div>
+          <svg class="acc-chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body" id="acc-body-prevent">
+          <div class="prevention-grid">
+            <div class="prevention-item">
+              <div class="prevention-icon">🛏️</div>
+              <h4>Sleep Under ITN Net</h4>
+              <p>Always sleep under an insecticide-treated mosquito net (ITN). This is the single most effective protection. Tuck it under the mattress and check for holes regularly.</p>
+              <span class="effectiveness-badge">Effectiveness: Very High</span>
+            </div>
+            <div class="prevention-item">
+              <div class="prevention-icon">🚿</div>
+              <h4>Indoor Residual Spraying</h4>
+              <p>Allow health workers to spray the inside walls of your home. The spray kills mosquitoes that rest on walls after biting. Accept free government spraying programmes.</p>
+              <span class="effectiveness-badge">Effectiveness: High</span>
+            </div>
+            <div class="prevention-item">
+              <div class="prevention-icon">💧</div>
+              <h4>Eliminate Standing Water</h4>
+              <p>Mosquitoes breed in still water. Empty containers, buckets, tyres, blocked gutters, and flower pots regularly. Cover water storage containers with tight lids.</p>
+              <span class="effectiveness-badge">Effectiveness: High</span>
+            </div>
+            <div class="prevention-item">
+              <div class="prevention-icon">👔</div>
+              <h4>Wear Protective Clothing</h4>
+              <p>Wear long sleeves and trousers from dusk to dawn when mosquitoes are most active. Light-coloured clothing is better — mosquitoes are attracted to dark colours.</p>
+              <span class="effectiveness-badge">Effectiveness: Medium</span>
+            </div>
+            <div class="prevention-item">
+              <div class="prevention-icon">🌿</div>
+              <h4>Use Repellents</h4>
+              <p>Apply insect repellent containing DEET to exposed skin. Burn mosquito coils or use plug-in repellents indoors. Neem oil is a natural alternative.</p>
+              <span class="effectiveness-badge">Effectiveness: Medium</span>
+            </div>
+            <div class="prevention-item">
+              <div class="prevention-icon">💉</div>
+              <h4>Intermittent Preventive Treatment</h4>
+              <p>Pregnant women should take IPTp (sulfadoxine-pyrimethamine) during antenatal visits. Children under 5 may receive SMC (seasonal malaria chemoprevention) tablets.</p>
+              <span class="effectiveness-badge">Effectiveness: Very High</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCORDION: TREATMENT -->
+      <div class="accordion-card" id="acc-treat">
+        <button class="accordion-header" aria-expanded="false" data-acc="treat">
+          <div class="acc-icon-wrap red-bg"><span>💊</span></div>
+          <div class="acc-header-text">
+            <strong>Treatment — How to Kill Malaria</strong>
+            <span>Test first, treat early, finish the full course</span>
+          </div>
+          <svg class="acc-chevron" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body" id="acc-body-treat">
+          <div class="treatment-steps">
+            <div class="treat-step">
+              <div class="treat-step-num">1</div>
+              <div class="treat-step-content">
+                <h4>Get Tested Immediately</h4>
+                <p>Go to your nearest health clinic for a <strong>Rapid Diagnostic Test (RDT)</strong> or blood smear. Results are available in 15 minutes. Testing is free at government clinics. <strong>Never self-diagnose.</strong></p>
+              </div>
+            </div>
+            <div class="treat-step">
+              <div class="treat-step-num">2</div>
+              <div class="treat-step-content">
+                <h4>Take ACT Medication</h4>
+                <p>If positive, you will receive <strong>Artemisinin-based Combination Therapy (ACT)</strong> — the gold standard treatment. Common ACTs in Sierra Leone: Artemether-Lumefantrine (AL), Artesunate-Amodiaquine. Treatment is <strong>FREE</strong> at government health facilities.</p>
+              </div>
+            </div>
+            <div class="treat-step">
+              <div class="treat-step-num">3</div>
+              <div class="treat-step-content">
+                <h4>Complete the Full Course</h4>
+                <p>Take ALL the medicine even if you feel better after 1–2 days. Stopping early causes drug resistance and the malaria can return stronger. Full course is usually 3 days.</p>
+              </div>
+            </div>
+            <div class="treat-step">
+              <div class="treat-step-num">4</div>
+              <div class="treat-step-content">
+                <h4>For Severe Malaria</h4>
+                <p>Severe malaria requires hospital admission and IV <strong>Artesunate</strong> injection — not tablets. If someone has seizures, loss of consciousness, or cannot take oral medicine, call 999 and rush to hospital immediately.</p>
+              </div>
+            </div>
+          </div>
+          <div class="guide-warning">
+            ⚠️ <strong>Important:</strong> Do NOT take chloroquine for malaria in Sierra Leone — most <em>P. falciparum</em> parasites here are resistant to it. Always use ACT prescribed by a health worker.
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         TAB 3: DISEASE PREVENTION
+    ═══════════════════════════════════════════ -->
+    <section id="panel-diseases" class="tab-panel" role="tabpanel" aria-labelledby="tab-diseases">
+      <div class="section-header-row">
+        <h2 class="section-title">🦠 Common Disease Prevention</h2>
+        <p class="section-sub">Prevent these common diseases with simple everyday actions.</p>
+      </div>
+
+      <div class="disease-cards-grid">
+
+        <!-- CHOLERA -->
+        <div class="disease-card" id="dcard-cholera">
+          <div class="disease-card-top cholera">
+            <span class="disease-emoji">💧</span>
+            <h3>Cholera</h3>
+            <span class="disease-badge">Waterborne</span>
+          </div>
+          <div class="disease-card-body">
+            <div class="disease-section">
+              <h4>⚡ How it spreads</h4>
+              <p>Contaminated water and food. Common during rainy season when floods wash sewage into water sources.</p>
+            </div>
+            <div class="disease-section">
+              <h4>🛡️ Prevention</h4>
+              <ul>
+                <li>Boil or treat all drinking water</li>
+                <li>Wash hands with soap before eating</li>
+                <li>Use proper latrines — no open defecation</li>
+                <li>Wash fruits and vegetables thoroughly</li>
+              </ul>
+            </div>
+            <div class="disease-section">
+              <h4>⚠️ Warning Signs</h4>
+              <p>Sudden severe watery diarrhoea (rice-water stool), vomiting, rapid dehydration. Can kill in hours. <strong>Go to clinic immediately.</strong></p>
+            </div>
+            <div class="disease-section">
+              <h4>💊 First Response</h4>
+              <p>Give Oral Rehydration Solution (ORS) — mix 1 litre clean water + 6 tsp sugar + 1 tsp salt. Go to hospital urgently.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TUBERCULOSIS (TB) -->
+        <div class="disease-card" id="dcard-tb">
+          <div class="disease-card-top tb">
+            <span class="disease-emoji">🫁</span>
+            <h3>Tuberculosis (TB)</h3>
+            <span class="disease-badge">Airborne</span>
+          </div>
+          <div class="disease-card-body">
+            <div class="disease-section">
+              <h4>⚡ How it spreads</h4>
+              <p>TB bacteria travel through the air when an infected person coughs, sneezes, or speaks. Prolonged close contact is needed for transmission.</p>
+            </div>
+            <div class="disease-section">
+              <h4>🛡️ Prevention</h4>
+              <ul>
+                <li>BCG vaccination at birth</li>
+                <li>Ensure good ventilation in homes</li>
+                <li>Avoid prolonged close contact with TB patients</li>
+                <li>Test all household contacts when someone has TB</li>
+              </ul>
+            </div>
+            <div class="disease-section">
+              <h4>⚠️ Warning Signs</h4>
+              <p>Cough lasting 3+ weeks, coughing blood, night sweats, unexplained weight loss, fatigue, chest pain.</p>
+            </div>
+            <div class="disease-section">
+              <h4>💊 Treatment</h4>
+              <p>TB is CURABLE. Free 6-month treatment at government clinics. Must complete ALL medication even when feeling better.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TYPHOID -->
+        <div class="disease-card" id="dcard-typhoid">
+          <div class="disease-card-top typhoid">
+            <span class="disease-emoji">🧫</span>
+            <h3>Typhoid Fever</h3>
+            <span class="disease-badge">Foodborne</span>
+          </div>
+          <div class="disease-card-body">
+            <div class="disease-section">
+              <h4>⚡ How it spreads</h4>
+              <p>Contaminated food and water. Spread by food handlers who haven't washed hands. Common in areas with poor sanitation.</p>
+            </div>
+            <div class="disease-section">
+              <h4>🛡️ Prevention</h4>
+              <ul>
+                <li>Drink only boiled or treated water</li>
+                <li>Wash hands thoroughly before eating/cooking</li>
+                <li>Eat hot, freshly cooked food</li>
+                <li>Avoid raw vegetables in contaminated areas</li>
+              </ul>
+            </div>
+            <div class="disease-section">
+              <h4>⚠️ Warning Signs</h4>
+              <p>Sustained high fever (39–40°C), headache, stomach pain, loss of appetite, "rose spots" on chest. Diarrhoea or constipation.</p>
+            </div>
+            <div class="disease-section">
+              <h4>💊 Treatment</h4>
+              <p>Antibiotics (prescribed by doctor). Rest and plenty of fluids. Hospitalisation for severe cases.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIARRHOEA IN CHILDREN -->
+        <div class="disease-card" id="dcard-diarrhoea">
+          <div class="disease-card-top diarrhoea">
+            <span class="disease-emoji">🧒</span>
+            <h3>Diarrhoea in Children</h3>
+            <span class="disease-badge">Preventable</span>
+          </div>
+          <div class="disease-card-body">
+            <div class="disease-section">
+              <h4>⚡ Leading cause of child death</h4>
+              <p>Diarrhoea kills more children under 5 than almost any other disease in Africa. Most cases are preventable.</p>
+            </div>
+            <div class="disease-section">
+              <h4>🛡️ Prevention</h4>
+              <ul>
+                <li>Breastfeed exclusively for 6 months</li>
+                <li>Wash hands with soap after toilet</li>
+                <li>Use clean water for preparation of food</li>
+                <li>Rotavirus vaccination (available free)</li>
+              </ul>
+            </div>
+            <div class="disease-section">
+              <h4>💊 Immediate Treatment (ORS + Zinc)</h4>
+              <p>Give ORS (Oral Rehydration Solution) at every loose stool. Give zinc tablets for 10 days. Continue breastfeeding. Seek help if blood in stool or child seems very sick.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- MENINGITIS -->
+        <div class="disease-card" id="dcard-mening">
+          <div class="disease-card-top mening">
+            <span class="disease-emoji">🧠</span>
+            <h3>Meningitis</h3>
+            <span class="disease-badge">Urgent</span>
+          </div>
+          <div class="disease-card-body">
+            <div class="disease-section">
+              <h4>⚡ What is it</h4>
+              <p>Inflammation of membranes surrounding brain and spinal cord. Can be bacterial (very dangerous) or viral. Can kill within 24 hours.</p>
+            </div>
+            <div class="disease-section">
+              <h4>⚠️ Warning Signs — CALL 999</h4>
+              <ul>
+                <li>Severe sudden headache</li>
+                <li>Stiff neck (cannot touch chin to chest)</li>
+                <li>High fever + sensitivity to light</li>
+                <li>Purple rash that doesn't fade under pressure</li>
+                <li>Confusion or seizures</li>
+              </ul>
+            </div>
+            <div class="disease-section">
+              <h4>🛡️ Prevention</h4>
+              <p>Meningococcal vaccine (ask at clinic). Avoid sharing cups, utensils with infected people. Good ventilation.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- HIV/AIDS -->
+        <div class="disease-card" id="dcard-hiv">
+          <div class="disease-card-top hiv">
+            <span class="disease-emoji">🎗️</span>
+            <h3>HIV/AIDS</h3>
+            <span class="disease-badge">Manageable</span>
+          </div>
+          <div class="disease-card-body">
+            <div class="disease-section">
+              <h4>⚡ How it spreads</h4>
+              <p>Unprotected sex, sharing needles, from mother to child during pregnancy/breastfeeding. NOT by hugging, sharing food, or mosquitoes.</p>
+            </div>
+            <div class="disease-section">
+              <h4>🛡️ Prevention</h4>
+              <ul>
+                <li>Use condoms correctly every time</li>
+                <li>Test and know your status (FREE and confidential)</li>
+                <li>Never share needles or syringes</li>
+                <li>Pregnant women: take PMTCT medicines</li>
+              </ul>
+            </div>
+            <div class="disease-section">
+              <h4>💊 Treatment (ART)</h4>
+              <p>HIV is NOT curable but is MANAGEABLE. ART (antiretroviral therapy) is FREE at government clinics. With ART, people with HIV live long, healthy lives. U = U (Undetectable = Untransmittable).</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         TAB 4: FIRE & ACCIDENTS
+    ═══════════════════════════════════════════ -->
+    <section id="panel-fire" class="tab-panel" role="tabpanel" aria-labelledby="tab-fire">
+      <div class="section-header-row">
+        <h2 class="section-title">🔥 Fire &amp; Accident First Aid</h2>
+        <p class="section-sub">Know what to do in fire emergencies and accidents. Call 999 or 019 (Fire Service) immediately.</p>
+      </div>
+
+      <!-- BURNS GUIDE -->
+      <div class="guide-card" id="guide-burns">
+        <div class="guide-card-header fire">
+          <div class="guide-icon-circle">🔥</div>
+          <div>
+            <h3>Burns First Aid</h3>
+            <p>Caused by fire, hot liquids, steam, chemicals, or electricity. Act immediately to reduce damage.</p>
+          </div>
+          <span class="urgency-badge red">URGENT</span>
+        </div>
+
+        <div class="burns-severity">
+          <div class="burn-level level-1">
+            <span class="level-badge">1st Degree</span>
+            <p>Red, painful skin (like sunburn). No blisters. Treat at home.</p>
+          </div>
+          <div class="burn-level level-2">
+            <span class="level-badge">2nd Degree</span>
+            <p>Blisters, deep redness, wet/shiny skin. Go to clinic.</p>
+          </div>
+          <div class="burn-level level-3">
+            <span class="level-badge">3rd Degree</span>
+            <p>White/charred skin, no pain (nerve damage). EMERGENCY — call 999.</p>
+          </div>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-icon">❄️</div>
+            <h4>Cool the Burn</h4>
+            <p>Run COOL (not cold/ice) water over the burn for 20 minutes. This stops the burning process in the tissue. Do NOT use ice, butter, toothpaste, or oil.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-icon">✂️</div>
+            <h4>Remove, Do Not Pull</h4>
+            <p>Gently remove clothing and jewellery near the burn UNLESS stuck to the skin. If stuck, do NOT pull — cut around it.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-icon">🩹</div>
+            <h4>Cover the Burn</h4>
+            <p>Cover with a clean, non-fluffy material (like cling film or a clean plastic bag). Do NOT use cotton wool or anything that sticks.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <div class="step-icon">🏥</div>
+            <h4>Get Medical Help</h4>
+            <p>Seek medical help for any burn larger than a postage stamp on the hand/face/genitals, any 2nd/3rd degree burn, or any burn on a child or elderly person.</p>
+          </div>
+        </div>
+        <div class="guide-warning">
+          ⚠️ <strong>Never:</strong> break blisters, apply butter/oil/toothpaste/ice, use fluffy cotton bandages. These worsen infection and tissue damage.
+        </div>
+      </div>
+
+      <!-- FIRE SAFETY -->
+      <div class="guide-card" id="guide-firesafety">
+        <div class="guide-card-header fire">
+          <div class="guide-icon-circle">🏠</div>
+          <div>
+            <h3>If a Fire Breaks Out in Your Home</h3>
+            <p>Seconds matter. Know the plan before it happens.</p>
+          </div>
+          <span class="urgency-badge red">CRITICAL</span>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-icon">📢</div>
+            <h4>Alert Everyone</h4>
+            <p>Shout "FIRE!" loudly to warn all people in the building. Do NOT waste time collecting belongings. Human life first.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-icon">🚪</div>
+            <h4>Get Out Low</h4>
+            <p>Stay low where air is cleaner. Feel doors before opening — if hot, do NOT open. Use stairs, never lift/elevator. Close doors behind you to slow fire spread.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-icon">🤝</div>
+            <h4>Help Others Out</h4>
+            <p>Help children, elderly, and disabled people first. If someone is trapped, do NOT re-enter — tell fire services exactly where they are.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <div class="step-icon">📞</div>
+            <h4>Call 019 &amp; 999</h4>
+            <p>Once outside and safe, call 019 (Fire Service) and 999 (Emergency). Give exact location, how many people are involved, and whether anyone is still inside.</p>
+          </div>
+        </div>
+
+        <div class="fire-tips-grid">
+          <div class="fire-tip">
+            <span>🧯</span>
+            <h4>Fire Extinguisher</h4>
+            <p>Remember PASS: <strong>P</strong>ull the pin, <strong>A</strong>im at base, <strong>S</strong>queeze handle, <strong>S</strong>weep side to side. Only use on small, contained fires.</p>
+          </div>
+          <div class="fire-tip">
+            <span>👘</span>
+            <h4>If Clothing Catches Fire</h4>
+            <p><strong>STOP</strong> — don't run. <strong>DROP</strong> — to the ground. <strong>ROLL</strong> — roll back and forth to smother flames. Cover face with hands.</p>
+          </div>
+          <div class="fire-tip">
+            <span>🍳</span>
+            <h4>Kitchen Fire</h4>
+            <p>For cooking oil fire: turn off heat and cover pan with a lid or damp cloth — NEVER use water. Water on oil fire causes explosive spread.</p>
+          </div>
+          <div class="fire-tip">
+            <span>⚡</span>
+            <h4>Electrical Fire</h4>
+            <p>Turn off electricity at the mains first. Do NOT use water on electrical fires. Use a CO₂ or powder extinguisher. Unplug devices if safe to do so.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROAD ACCIDENT -->
+      <div class="guide-card" id="guide-road">
+        <div class="guide-card-header amber">
+          <div class="guide-icon-circle">🚗</div>
+          <div>
+            <h3>Road Accident First Aid</h3>
+            <p>Sierra Leone has high road accident rates. Know how to help safely.</p>
+          </div>
+          <span class="urgency-badge amber-badge">URGENT</span>
+        </div>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-icon">🛑</div>
+            <h4>Make the Scene Safe</h4>
+            <p>Turn on hazard lights. Place warning signs/rocks behind the vehicle. Do NOT move victims unless there is immediate danger (e.g., fire). Call 999 first.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-icon">🗣️</div>
+            <h4>Check Consciousness</h4>
+            <p>Talk to the victim, tap gently. If unconscious but breathing, place in recovery position (on their side). If not breathing, begin CPR only if trained.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-icon">🩸</div>
+            <h4>Control Bleeding</h4>
+            <p>Apply firm pressure to wounds with any clean cloth. Do NOT remove the cloth. Do NOT remove objects embedded in wounds — leave them in place.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <div class="step-icon">📍</div>
+            <h4>Stay &amp; Direct Help</h4>
+            <p>Stay at the scene to direct ambulance. Keep the victim still, warm, and calm. Reassure them help is coming. Note what happened for medical staff.</p>
+          </div>
+        </div>
+        <div class="guide-warning">
+          ⚠️ <strong>Neck injury:</strong> If you suspect a spinal injury (vehicle accident, fall), do NOT move the person unless in immediate danger. Wait for emergency services.
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <p><strong>HealthPulse SL</strong> — Emergency Hub | <a href="index.html">Back to Main Site</a></p>
+    <p style="margin-top:6px;">Information based on WHO guidelines and Sierra Leone Ministry of Health protocols.</p>
+    <p style="margin-top:6px;opacity:0.6;font-size:.72rem;">This is for educational purposes. Always seek professional medical care in an emergency.</p>
+  </footer>
+
+  <!-- Print Button (floating) -->
+  <button class="print-btn" onclick="window.print()" aria-label="Print this guide" title="Print first aid guide">
+    🖨️
+  </button>
+
+  <script src="js/emergency.js"></script>
+</body>
+</html>

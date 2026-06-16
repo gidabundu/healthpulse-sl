@@ -1,0 +1,976 @@
+/* ═══════════════════════════════════════════════════
+   HealthPulse SL — Emergency Hub Premium Styles
+   Cohesive layout overlaying the new styles.css system.
+   ═══════════════════════════════════════════════════ */
+
+:root {
+  --red-dark: #8B0000;
+  --red-main: #EF4444;             /* Aligned with standard red in styles.css */
+  --red-mid: #F87171;
+  --red-light: #FEE2E2;
+  
+  --amber-dark: #D97706;
+  --fire-orange: #F97316;
+  --fire-bg: #FFEDD5;
+  
+  --green-safe: #10B981;
+  --green-safe-bg: #D1FAE5;
+  
+  --emergency-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.15), 0 8px 10px -6px rgba(239, 68, 68, 0.1);
+}
+
+.dark-mode {
+  --red-main: #EF4444;
+  --red-mid: #F87171;
+  --red-light: #450A0A;
+  
+  --fire-bg: #431407;
+  --green-safe-bg: #064E3B;
+  
+  --emergency-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+/* ── EMERGENCY NAV LINK (TOPBAR) ── */
+.emergency-nav-link {
+  background: var(--red-main) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: var(--radius-pill) !important;
+  padding: 8px 18px !important;
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+  transition: var(--transition);
+}
+
+.emergency-nav-link:hover, .emergency-nav-link.active {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.35);
+  filter: brightness(1.1);
+}
+
+.emergency-dot {
+  width: 8px;
+  height: 8px;
+  background: #FFFFFF;
+  border-radius: 50%;
+  display: inline-block;
+  animation: emergencyPulse 1.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes emergencyPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.4); }
+}
+
+/* ── HOTLINE BANNER (STICKY HEADER) ── */
+.hotline-banner {
+  background: #0C0D0D;             /* Rich near-black matches hero */
+  color: #FFFFFF;
+  padding: 14px 32px;
+  position: sticky;
+  top: 72px;
+  z-index: 90;
+  border-bottom: 1px solid #1E2022;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.dark-mode .hotline-banner {
+  background: #161719;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.hotline-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.hotline-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--red-mid);
+}
+
+.pulse-ring {
+  width: 10px;
+  height: 10px;
+  background: var(--red-main);
+  border-radius: 50%;
+  display: inline-block;
+  animation: emergencyPulse 1s ease-in-out infinite;
+  box-shadow: 0 0 8px var(--red-main);
+}
+
+.hotline-numbers {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.hotline-number {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #FFFFFF;
+  background: #191B1F;
+  border: 1px solid #2D3139;
+  border-radius: var(--radius-lg);
+  padding: 10px 20px;
+  transition: var(--transition);
+  min-width: 100px;
+}
+
+.hotline-number:hover {
+  background: var(--red-main);
+  border-color: var(--red-main);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.25);
+}
+
+.hotline-icon {
+  font-size: 1.2rem;
+  margin-bottom: 2px;
+}
+
+.hotline-num {
+  font-size: 1.15rem;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.hotline-type {
+  font-size: 0.62rem;
+  opacity: 0.65;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+}
+
+.hotline-number:hover .hotline-type {
+  opacity: 0.9;
+}
+
+/* ── EMERGENCY HERO (SLICK HEADER) ── */
+.emergency-hero {
+  background: #0C0D0D;             /* Rich solid near-black */
+  color: #FFFFFF;
+  padding: 56px 24px 0;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid #1E2022;
+}
+
+.emergency-hero::before {
+  content: '';
+  position: absolute;
+  right: -5%;
+  top: -15%;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.12) 0%, rgba(239, 68, 68, 0) 70%);
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.emergency-hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.emergency-hero .hero-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--red-mid);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--red-main);
+  border-radius: 50%;
+  animation: emergencyPulse 1.2s ease-in-out infinite;
+  box-shadow: 0 0 6px var(--red-main);
+}
+
+.emergency-hero h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+}
+
+.emergency-hero h1 em {
+  color: var(--red-mid);
+  font-style: normal;
+}
+
+.emergency-hero .hero-sub {
+  font-size: clamp(1rem, 2vw, 1.1rem);
+  color: #9CA3AF;
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+/* ── HERO TABS (PILL SHAPES) ── */
+.hero-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.hero-tab {
+  background: #191B1F;
+  border: 1px solid #2D3139;
+  color: #9CA3AF;
+  border-radius: 12px 12px 0 0;
+  padding: 12px 24px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  border-bottom: none;
+}
+
+.hero-tab:hover {
+  background: #2D3139;
+  color: #FFFFFF;
+}
+
+.hero-tab.active {
+  background: var(--bg-main) !important;
+  color: var(--red-main) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dark-mode .hero-tab.active {
+  background: var(--bg-main) !important;
+  color: var(--red-mid) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* ── MAIN CONTENT CANVAS ── */
+.emergency-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+}
+
+.tab-panel {
+  display: none;
+  animation: fadeInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section-header-row {
+  margin-bottom: 32px;
+}
+
+.section-title {
+  font-size: clamp(1.4rem, 3.5vw, 2rem);
+  font-weight: 900;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.section-sub {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ── STEP CARD & GUIDE DETAILS ── */
+.guide-card {
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 36px;
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+
+.guide-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.guide-card-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 32px;
+  color: #FFFFFF;
+  position: relative;
+}
+
+.guide-card-header.bleed { background: linear-gradient(135deg, var(--red-dark), var(--red-main)); }
+.guide-card-header.green { background: linear-gradient(135deg, #0A4E35, var(--green-safe)); }
+.guide-card-header.amber { background: linear-gradient(135deg, var(--amber-dark), var(--fire-orange)); }
+.guide-card-header.fire { background: linear-gradient(135deg, #9A3412, var(--fire-orange)); }
+
+.guide-icon-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.guide-card-header h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+}
+
+.guide-card-header p {
+  font-size: 0.88rem;
+  opacity: 0.9;
+  line-height: 1.5;
+}
+
+.urgency-badge {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  border-radius: var(--radius-pill);
+  padding: 4px 12px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.2);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Steps Grid */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.step-card {
+  padding: 28px 24px;
+  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+  background: var(--bg-surface);
+  transition: var(--transition);
+}
+
+.step-card:hover {
+  background: var(--bg-main);
+}
+
+.step-number {
+  width: 36px;
+  height: 36px;
+  color: #FFFFFF;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1rem;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.step-icon {
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+}
+
+.step-card h4 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.step-card p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.guide-warning {
+  padding: 16px 24px;
+  background: var(--red-light);
+  border-left: 4px solid var(--red-main);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.guide-warning.green-warn {
+  background: var(--green-safe-bg);
+  border-left-color: var(--green-safe);
+}
+
+.guide-warning.amber-warn {
+  background: var(--fire-bg);
+  border-left-color: var(--fire-orange);
+}
+
+/* ── MALARIA STUFF ── */
+.malaria-stats-banner {
+  background: #161719;             /* Matches deep dark contrast card */
+  border: 1px solid var(--border-color);
+  color: #FFFFFF;
+  border-radius: var(--radius-lg);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0;
+  overflow: hidden;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-sm);
+}
+
+.malaria-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 20px;
+  border-right: 1px solid var(--border-color);
+}
+
+.malaria-stat:last-child {
+  border-right: none;
+}
+
+.mal-num {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+
+.mal-lbl {
+  font-size: 0.72rem;
+  color: #9CA3AF;
+  text-align: center;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── ACCORDION (MINIMAL AND PREMIUM) ── */
+.accordion-card {
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 16px;
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+
+.accordion-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.accordion-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: var(--transition);
+}
+
+.accordion-header:hover {
+  background: var(--bg-main);
+}
+
+.accordion-header.open {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.acc-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.acc-icon-wrap.green-bg { background: var(--green-safe-bg); }
+.acc-icon-wrap.amber-bg { background: var(--fire-bg); }
+.acc-icon-wrap.red-bg { background: var(--red-light); }
+
+.acc-header-text {
+  flex: 1;
+}
+
+.acc-header-text strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.acc-header-text span {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.acc-chevron {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+  transition: transform 0.2s;
+}
+
+.accordion-header[aria-expanded="true"] .acc-chevron {
+  transform: rotate(180deg);
+}
+
+.accordion-body {
+  display: none;
+  padding: 24px;
+}
+
+.accordion-body.show {
+  display: block;
+}
+
+.acc-content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.acc-info-card {
+  background: var(--bg-main);
+  border-radius: 12px;
+  padding: 18px;
+  border: 1px solid var(--border-color);
+}
+
+.acc-info-card h4 {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.acc-info-card p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* timeline for symptoms */
+.symptoms-timeline {
+  position: relative;
+  padding-left: 20px;
+  border-left: 2px solid var(--border-color);
+  margin-bottom: 16px;
+}
+
+.timeline-item {
+  position: relative;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.timeline-item:last-child {
+  border-bottom: none;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -27px;
+  top: 16px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-surface);
+}
+
+.timeline-dot.green { background: var(--green-safe); }
+.timeline-dot.amber { background: var(--fire-orange); }
+.timeline-dot.red { background: var(--red-main); }
+
+.timeline-content strong {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.timeline-content p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* prevention grid */
+.prevention-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.prevention-item {
+  background: var(--green-safe-bg);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.prevention-icon {
+  font-size: 2.2rem;
+}
+
+.prevention-item h4 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--green-safe);
+}
+
+.prevention-item p {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.effectiveness-badge {
+  display: inline-block;
+  background: var(--green-safe);
+  color: #FFFFFF;
+  border-radius: var(--radius-pill);
+  padding: 4px 12px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: fit-content;
+}
+
+.dark-mode .effectiveness-badge {
+  color: #0C0D0D;
+}
+
+/* treatment steps */
+.treatment-steps {
+  margin-bottom: 20px;
+}
+
+.treat-step {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.treat-step:last-child {
+  border-bottom: none;
+}
+
+.treat-step-num {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: var(--red-main);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 950;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.treat-step-content h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.treat-step-content p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ── DISEASE PREVENTION GRIDS ── */
+.disease-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 24px;
+}
+
+.disease-card {
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+
+.disease-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.disease-card-top {
+  padding: 24px;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.disease-card-top.cholera { background: linear-gradient(135deg, #1E3A8A, #3B82F6); }
+.disease-card-top.tb { background: linear-gradient(135deg, #581C87, #8B5CF6); }
+.disease-card-top.typhoid { background: linear-gradient(135deg, #7F1D1D, var(--red-main)); }
+.disease-card-top.diarrhoea { background: linear-gradient(135deg, #134E5E, #71B280); }
+.disease-card-top.mening { background: linear-gradient(135deg, #111827, #4B5563); }
+.disease-card-top.hiv { background: linear-gradient(135deg, #4C1D95, #B91C1C); }
+
+.disease-emoji {
+  font-size: 2.2rem;
+}
+
+.disease-card-top h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.disease-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-pill);
+  padding: 4px 12px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  width: fit-content;
+}
+
+.disease-card-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.disease-section {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+}
+
+.disease-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.disease-section h4 {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.disease-section p {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.disease-section ul {
+  padding-left: 20px;
+}
+
+.disease-section ul li {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ── BURNS SEVERITY SECTION ── */
+.burns-severity {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.burn-level {
+  flex: 1;
+  padding: 20px;
+  border-right: 1px solid var(--border-color);
+}
+
+.burn-level:last-child {
+  border-right: none;
+}
+
+.level-badge {
+  display: inline-block;
+  border-radius: var(--radius-pill);
+  padding: 4px 12px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.level-1 .level-badge { background: var(--red-light); color: var(--red-main); }
+.level-2 .level-badge { background: var(--fire-bg); color: var(--fire-orange); }
+.level-3 .level-badge { background: #F3F4F6; color: #111827; }
+
+.dark-mode .level-3 .level-badge { background: #1F2937; color: #F9FAFB; }
+
+.burn-level p {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ── PRINT FLOAT FAB ── */
+.print-btn {
+  position: fixed;
+  bottom: 104px;
+  left: 32px;
+  z-index: 300;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.2), box-shadow 0.25s;
+}
+
+.print-btn:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  background: var(--bg-main);
+}
+
+/* ── RESPONSIVE ADAPTATIONS ── */
+@media (max-width: 768px) {
+  .hotline-inner {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+  }
+  .hotline-numbers {
+    justify-content: center;
+  }
+  .hero-tabs {
+    gap: 4px;
+  }
+  .hero-tab {
+    padding: 10px 16px;
+    font-size: 0.8rem;
+  }
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+  .burns-severity {
+    flex-direction: column;
+  }
+  .burn-level {
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .burn-level:last-child {
+    border-bottom: none;
+  }
+  .prevention-grid, .disease-cards-grid, .acc-content-grid {
+    grid-template-columns: 1fr;
+  }
+  .malaria-stats-banner {
+    grid-template-columns: 1fr 1fr;
+  }
+  .print-btn {
+    bottom: 96px;
+    left: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hotline-numbers {
+    gap: 8px;
+  }
+  .hotline-number {
+    padding: 8px 12px;
+    min-width: 80px;
+  }
+  .malaria-stats-banner {
+    grid-template-columns: 1fr;
+  }
+}

@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
+  <meta name="description" content="HealthPulse SL Admin Dashboard — secure content management system."/>
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💚</text></svg>"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Dashboard - HealthPulse SL</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="css/admin.css"/>
 </head>
 <body>
@@ -36,7 +39,7 @@
         <p id="login-error" class="error-message"></p>
       </form>
       <div class="login-footer">
-        <p>Default credentials: admin / admin123</p>
+        <p>Contact your system administrator if you need access.</p>
       </div>
     </div>
   </div>
@@ -260,12 +263,12 @@
             <option value="water">Water & Sanitation</option>
             <option value="hiv">HIV/AIDS</option>
             <option value="vaccination">Vaccination</option>
-            <option value="mental-health">Mental Health</option>
+            <option value="mentalhealth">Mental Health</option>
             <option value="tuberculosis">Tuberculosis</option>
             <option value="diabetes">Diabetes</option>
             <option value="hypertension">Hypertension</option>
             <option value="cholera">Cholera</option>
-            <option value="family-planning">Family Planning</option>
+            <option value="familyplanning">Family Planning</option>
           </select>
         </div>
         <div class="form-group">
@@ -275,6 +278,10 @@
         <div class="form-group">
           <label for="article-body">Body</label>
           <textarea id="article-body" name="body" rows="8" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="article-image">Illustration Image URL</label>
+          <input type="url" id="article-image" name="image" placeholder="Optional. e.g. https://images.unsplash.com/..."/>
         </div>
         <div class="form-group">
           <label for="article-author">Author</label>

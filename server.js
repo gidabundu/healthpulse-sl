@@ -4,15 +4,40 @@ const cors = require('cors');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'healthpulse-admin-secret-key-2024';
 
+// Warn if using default JWT secret
+if (JWT_SECRET === 'healthpulse-admin-secret-key-2024') {
+  console.warn('[SECURITY WARNING] JWT_SECRET is set to the default hardcoded value. Set the JWT_SECRET environment variable to a strong random secret before deploying to production.');
+}
+
 // Middleware
-app.use(cors());
+app.use(helmet());
+
+const corsOptions = {
+  origin: process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
+    : true, // Allow all in development
+  credentials: true
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
+
+// Rate limiter: max 10 login attempts per 15 minutes
+const loginRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many login attempts. Please try again after 15 minutes.' }
+});
 
 // File-based database
 const DATA_FILE = process.env.DATA_FILE || path.join(__dirname, 'healthpulse-data.json');
@@ -105,10 +130,18 @@ const authenticateAdmin = (req, res, next) => {
   }
 };
 
+const requireSuperAdmin = (req, res, next) => {
+  if (req.admin && req.admin.role === 'superadmin') {
+    next();
+  } else {
+    res.status(403).json({ error: 'Forbidden: Super Admin role required' });
+  }
+};
+
 // Admin Authentication Routes
 
-// Admin Login
-app.post('/api/admin/login', (req, res) => {
+// Admin Login (rate limited)
+app.post('/api/admin/login', loginRateLimiter, (req, res) => {
   try {
     const { username, password } = req.body;
     
@@ -213,7 +246,7 @@ app.get('/api/admin/users', authenticateAdmin, (req, res) => {
   }
 });
 
-app.post('/api/admin/users', authenticateAdmin, (req, res) => {
+app.post('/api/admin/users', authenticateAdmin, requireSuperAdmin, (req, res) => {
   try {
     const { username, password, email, full_name, role } = req.body;
     
@@ -257,7 +290,7 @@ app.post('/api/admin/users', authenticateAdmin, (req, res) => {
   }
 });
 
-app.delete('/api/admin/users/:id', authenticateAdmin, (req, res) => {
+app.delete('/api/admin/users/:id', authenticateAdmin, requireSuperAdmin, (req, res) => {
   try {
     const userId = parseInt(req.params.id);
     
@@ -325,9 +358,9 @@ app.get('/api/articles', (req, res) => {
 // GET single article
 app.get('/api/articles/:id', (req, res) => {
   try {
-    const article = db.articles.find(a => a.id === req.params.id);
+    const article = { ...db.articles.find(a => a.id === req.params.id) };
     
-    if (!article) {
+    if (!article || Object.keys(article).length === 0) {
       return res.status(404).json({ error: 'Article not found' });
     }
 
@@ -341,10 +374,10 @@ app.get('/api/articles/:id', (req, res) => {
   }
 });
 
-// POST create article
-app.post('/api/articles', (req, res) => {
+// POST create article (requires authentication)
+app.post('/api/articles', authenticateAdmin, (req, res) => {
   try {
-    const { id, topic, title, excerpt, body, author, tags, date, lang } = req.body;
+    const { id, topic, title, excerpt, body, author, tags, date, lang, image } = req.body;
     
     if (!topic || !title || !excerpt || !body) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -365,6 +398,7 @@ app.post('/api/articles', (req, res) => {
       tags: tagsStr,
       date: articleDate,
       lang: articleLang,
+      image: image || '',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     };
@@ -381,10 +415,10 @@ app.post('/api/articles', (req, res) => {
   }
 });
 
-// PUT update article
-app.put('/api/articles/:id', (req, res) => {
+// PUT update article (requires authentication)
+app.put('/api/articles/:id', authenticateAdmin, (req, res) => {
   try {
-    const { topic, title, excerpt, body, author, tags, lang } = req.body;
+    const { topic, title, excerpt, body, author, tags, lang, image } = req.body;
     
     const tagsStr = Array.isArray(tags) ? tags.join(',') : tags;
 
@@ -403,6 +437,7 @@ app.put('/api/articles/:id', (req, res) => {
       author,
       tags: tagsStr,
       lang,
+      image: image || '',
       updated_at: new Date().toISOString()
     };
 
@@ -418,8 +453,8 @@ app.put('/api/articles/:id', (req, res) => {
   }
 });
 
-// DELETE article
-app.delete('/api/articles/:id', (req, res) => {
+// DELETE article (requires authentication)
+app.delete('/api/articles/:id', authenticateAdmin, (req, res) => {
   try {
     const articleIndex = db.articles.findIndex(a => a.id === req.params.id);
 

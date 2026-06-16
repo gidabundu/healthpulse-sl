@@ -10,6 +10,7 @@
       "tags": "prevention,treatment,mosquito,community",
       "date": "2024-08-15",
       "lang": "en",
+      "image": "https://images.unsplash.com/photo-1579684389782-64d84b5e902a?w=800&auto=format&fit=crop&q=60",
       "created_at": "2026-06-12T19:23:11.502Z",
       "updated_at": "2026-06-12T19:23:11.517Z"
     },
@@ -23,6 +24,7 @@
       "tags": "antenatal,pregnancy,newborn,free-healthcare",
       "date": "2024-09-02",
       "lang": "en",
+      "image": "https://images.unsplash.com/photo-1531983412531-1f49a365ffed?w=800&auto=format&fit=crop&q=60",
       "created_at": "2026-06-12T19:23:11.517Z",
       "updated_at": "2026-06-12T19:23:11.517Z"
     },
@@ -36,6 +38,7 @@
       "tags": "children,breastfeeding,diet,stunting",
       "date": "2024-07-20",
       "lang": "en",
+      "image": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&auto=format&fit=crop&q=60",
       "created_at": "2026-06-12T19:23:11.517Z",
       "updated_at": "2026-06-12T19:23:11.517Z"
     },
@@ -49,6 +52,7 @@
       "tags": "cholera,handwashing,latrine,water",
       "date": "2024-10-10",
       "lang": "en",
+      "image": "https://images.unsplash.com/photo-1581091919816-2a4c22a8a903?w=800&auto=format&fit=crop&q=60",
       "created_at": "2026-06-12T19:23:11.517Z",
       "updated_at": "2026-06-12T19:23:11.517Z"
     },
@@ -62,6 +66,7 @@
       "tags": "testing,ART,PMTCT,stigma",
       "date": "2024-06-05",
       "lang": "en",
+      "image": "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&auto=format&fit=crop&q=60",
       "created_at": "2026-06-12T19:23:11.517Z",
       "updated_at": "2026-06-12T19:23:11.517Z"
     },
@@ -75,6 +80,7 @@
       "tags": "EPI,children,polio,measles",
       "date": "2024-11-01",
       "lang": "en",
+      "image": "https://images.unsplash.com/photo-1584515901407-d8f46c53a5c4?w=800&auto=format&fit=crop&q=60",
       "created_at": "2026-06-12T19:23:11.517Z",
       "updated_at": "2026-06-12T19:23:11.517Z"
     },
@@ -88,6 +94,7 @@
       "tags": "stigma,depression,PTSD,community",
       "date": "2024-05-18",
       "lang": "en",
+      "image": "https://images.unsplash.com/photo-1527137341206-e92753e68c0e?w=800&auto=format&fit=crop&q=60",
       "created_at": "2026-06-12T19:23:11.517Z",
       "updated_at": "2026-06-12T19:23:11.517Z"
     },
@@ -101,6 +108,7 @@
       "tags": "treatment,diagnosis,lung,co-infection",
       "date": "2024-04-12",
       "lang": "en",
+      "image": "https://images.unsplash.com/photo-1530026405186-ed1ea0ac7a63?w=800&auto=format&fit=crop&q=60",
       "created_at": "2026-06-12T19:23:11.517Z",
       "updated_at": "2026-06-12T19:23:11.517Z"
     },
@@ -114,6 +122,7 @@
       "tags": "blood-sugar,prevention,lifestyle,complications",
       "date": "2024-03-25",
       "lang": "en",
+      "image": "https://images.unsplash.com/photo-1508847154043-be12a3bc4b1c?w=800&auto=format&fit=crop&q=60",
       "created_at": "2026-06-12T19:23:11.517Z",
       "updated_at": "2026-06-12T19:23:11.517Z"
     },
@@ -127,6 +136,7 @@
       "tags": "blood-pressure,stroke,heart,prevention",
       "date": "2024-02-14",
       "lang": "en",
+      "image": "https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?w=800&auto=format&fit=crop&q=60",
       "created_at": "2026-06-12T19:23:11.517Z",
       "updated_at": "2026-06-12T19:23:11.517Z"
     },
@@ -140,6 +150,7 @@
       "tags": "water,diarrhoea,ORS,prevention",
       "date": "2024-01-08",
       "lang": "en",
+      "image": "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=800&auto=format&fit=crop&q=60",
       "created_at": "2026-06-12T19:23:11.517Z",
       "updated_at": "2026-06-12T19:23:11.517Z"
     },
@@ -153,6 +164,7 @@
       "tags": "contraception,maternal,spacing,health",
       "date": "2024-12-20",
       "lang": "en",
+      "image": "https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=800&auto=format&fit=crop&q=60",
       "created_at": "2026-06-12T19:23:11.517Z",
       "updated_at": "2026-06-12T19:23:11.517Z"
     }
@@ -166,7 +178,7 @@
       "full_name": "System Administrator",
       "role": "superadmin",
       "created_at": "2026-06-12T19:23:11.695Z",
-      "last_login": "2026-06-13T08:41:52.994Z"
+      "last_login": "2026-06-16T01:16:57.698Z"
     }
   ]
 }
