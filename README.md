@@ -35,6 +35,12 @@ Specifically, the platform addresses:
 git clone https://github.com/yourusername/healthpulse-sl.git
 cd healthpulse-sl
 npm install
+
+# 1. Copy .env.example to .env and configure DATABASE_URL and GEMINI_API_KEY
+# 2. Run the database setup script to create tables and seed data in Neon PostgreSQL:
+node init_db.js
+
+# 3. Start the server:
 npm start
 # Visit http://localhost:3000
 ```
@@ -64,14 +70,15 @@ Then visit `http://localhost:8080`
 healthpulse-sl/
 ├── index.html          # Frontend application
 ├── admin.html          # Admin dashboard
-├── server.js           # Node.js backend with JSON database
+├── server.js           # Node.js backend connecting to Neon PostgreSQL
+├── init_db.js          # Neon PostgreSQL database setup & seeding script
 ├── package.json        # Project metadata and dependencies
 ├── vercel.json         # Vercel rewrite config for /api -> Render
 ├── render.yaml         # Render Blueprint for backend deployment
 ├── .env.example        # Local and production environment variables
 ├── css/                # Stylesheets
 ├── js/                 # JavaScript files
-├── healthpulse-data.json  # Sample data
+├── healthpulse-data.json  # Local sample data
 └── README.md           # This file
 ```
 
@@ -79,7 +86,7 @@ healthpulse-sl/
 
 HealthPulse SL represents a complete implementation and refinement of the design artifacts developed in earlier course milestones:
 - **Data Flow Diagram (DFD) Reflection:** The application directly implements the data flows modeled in Assignment 1. Public users fetch content (read-only flow) from the articles store, while validated admin roles push, modify, and delete records (read/write flow) securely via JWT tokens.
-- **Entity Relationship Diagram (ERD) Reflection:** The database structure implements the relationships mapped in Assignment 2, supporting an `admin_users` entity with role definitions (Super Admin vs Author) and an `articles` entity containing metadata, body content, and tags.
+- **Entity Relationship Diagram (ERD) Reflection:** The database structure implements the relationships mapped in Assignment 2, utilizing Neon PostgreSQL tables (`admin_users` and `articles`) with appropriate serial keys, foreign properties, and data types (like array variables for tags).
 - **System Flowchart Integration:** The flow for editing articles translates the flowchart checks into JavaScript. For instance, the **MoH/WHO Validation Checks** automatically audit user input in real time (e.g., verifying if ineffective treatments like chloroquine are suggested or confirming clinic referrals are listed) before allowing saves.
 - **UI Mock-ups & Prototypes:** The final application matches the responsive dashboard and reading page wireframes. The interface adapts cleanly across mobile, tablet, and desktop screens with a professional sidebar and content layout.
 
@@ -87,13 +94,13 @@ HealthPulse SL represents a complete implementation and refinement of the design
 
 - **Frontend:** Vanilla HTML5, CSS3, JavaScript (ES6+)
 - **Backend:** Node.js with Express
-- **Database:** JSON File-based DB (`healthpulse-data.json` with automatic sync/backup)
+- **Database:** Neon Cloud PostgreSQL (with local-first localStorage fallback on client)
 - **API:** RESTful endpoints for CRUD operations
 - **Fonts:** Google Fonts (Playfair Display, Nunito)
 - **No build tools required** — pure open-web standards
 
 ### Architecture
-- **Full Stack Mode:** Node.js + Express backend with REST API
+- **Full Stack Mode:** Node.js + Express backend connecting to Neon PostgreSQL
 - **Frontend Only Mode:** Browser localStorage for data persistence
 - **Seamless switching:** Frontend automatically falls back to localStorage if API is unavailable
 
@@ -145,7 +152,7 @@ In accordance with international data protection standards (such as GDPR) and Di
 
 **2. Render**
 - Great free tier for Node.js
-- Persistent disk storage for JSON database
+- Simple connection to cloud Neon PostgreSQL database
 - Simple deployment process
 - Good performance
 
@@ -187,7 +194,7 @@ Use Vercel for the static frontend and Render for the Node.js backend.
 2. In Render, create a new Blueprint deployment from this repository.
 3. Render will read [render.yaml](render.yaml) and create the `healthpulse-sl-api` service.
 4. After the first deploy, confirm the service URL is `https://healthpulse-sl-api.onrender.com`.
-5. The backend stores JSON data on a persistent disk mounted at `/var/data`.
+5. The backend connects securely to your Neon PostgreSQL database.
 
 ### 2) Point Vercel at the Render backend
 
@@ -198,18 +205,19 @@ Use Vercel for the static frontend and Render for the Node.js backend.
 ### 3) Local development
 
 1. Run `npm install`.
-2. Start the backend with `npm start`.
-3. Open `index.html` or `admin.html` locally; the scripts fall back to `http://localhost:3000/api` when running on localhost or from `file://`.
+2. Configure your local `.env` file with `DATABASE_URL` and `GEMINI_API_KEY`.
+3. Start the backend with `npm start`.
+4. Open `index.html` or `admin.html` locally; the scripts fall back to `http://localhost:3000/api` when running on localhost or from `file://`.
 
 ### Environment variables
 
-Copy [`.env.example`](.env.example) for local settings. On Render, `JWT_SECRET` and `DATA_FILE` are set by the Blueprint.
+Copy [`.env.example`](.env.example) to `.env` and fill in local settings. On Render (or other hosting providers), configure the `DATABASE_URL`, `GEMINI_API_KEY`, and `JWT_SECRET` variables in the environment settings dashboard.
 
 ### Notes
 
 - The frontend does not need a build step.
 - If you rename the Render service, update the destination in [vercel.json](vercel.json).
-- The backend persists article/admin data only when the Render disk is attached.
+- The backend database logic is completely serverless and independent of Render disk mounts.
 
 ### Render troubleshooting
 
@@ -236,7 +244,7 @@ MIT License — see [LICENSE](LICENSE) file for details.
 
 ## Roadmap
 
-- [x] Backend API (Node.js + JSON Database)
+- [x] Backend API (Node.js + Neon PostgreSQL Database)
 - [ ] User authentication for article authors
 - [ ] Audio content for low-literacy users
 - [ ] Offline PWA support (Service Worker)
