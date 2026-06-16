@@ -422,24 +422,20 @@ const AI_MODEL='claude-3-5-sonnet-20241022';
 const HEALTH_SYSTEM=`You are HealthBot, an expert public health assistant for Sierra Leone, aligned with SDG 3 (Good Health & Well-being). You provide accurate, compassionate, culturally appropriate health information about diseases and conditions common in Sierra Leone including malaria, maternal health, nutrition, HIV/AIDS, water/sanitation, mental health, vaccination, and tuberculosis. Always encourage people to visit their nearest health facility for diagnosis and treatment. Keep responses concise, warm, and practical. Avoid medical jargon. Never diagnose individuals.`;
 
 async function callClaude(messages,systemPrompt,maxTokens=800){
-  const API_KEY=window.ANTHROPIC_API_KEY || '';
-  if(!API_KEY)throw new Error('Anthropic API key not configured');
-  const res=await fetch('https://api.anthropic.com/v1/messages',{
+  const res=await fetch(`${API_BASE}/ai`,{
     method:'POST',
     headers:{
-      'Content-Type':'application/json',
-      'x-api-key':API_KEY,
-      'anthropic-version':'2023-06-01'
+      'Content-Type':'application/json'
     },
     body:JSON.stringify({
-      model:AI_MODEL,max_tokens:maxTokens,
-      system:systemPrompt||HEALTH_SYSTEM,
-      messages
+      messages,
+      systemPrompt,
+      maxTokens
     })
   });
-  if(!res.ok){const err=await res.json();throw new Error(err.error?.message||'API error');}
+  if(!res.ok){const err=await res.json();throw new Error(err.error||'AI API error');}
   const data=await res.json();
-  return data.content.filter(b=>b.type==='text').map(b=>b.text).join('');
+  return data.text;
 }
 
 // ── AI FEATURE 1: Article Generation ─────────────────

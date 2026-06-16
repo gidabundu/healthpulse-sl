@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const fs = require('fs');
 const cors = require('cors');
@@ -66,6 +67,13 @@ function loadSeedArticles() {
     console.error('Error reading seed article file, falling back to built-in samples');
     return [];
   }
+}
+
+// Helper to parse tags safely (whether stored as array or string)
+function parseTags(tags) {
+  if (Array.isArray(tags)) return tags;
+  if (typeof tags === 'string') return tags.split(',').map(t => t.trim()).filter(Boolean);
+  return [];
 }
 
 // Save database to file
@@ -137,6 +145,73 @@ const requireSuperAdmin = (req, res, next) => {
     res.status(403).json({ error: 'Forbidden: Super Admin role required' });
   }
 };
+
+// AI Integration API proxy using Google Gemini API
+app.post('/api/ai', async (req, res) => {
+  try {
+    const { messages, systemPrompt, maxTokens } = req.body;
+    
+    if (!messages || !Array.isArray(messages)) {
+      return res.status(400).json({ error: 'Messages array is required' });
+    }
+    
+    const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+    
+    if (!GEMINI_API_KEY) {
+      return res.status(500).json({ error: 'Gemini API key is not configured on the server.' });
+    }
+    
+    // Map messages to Gemini's format (user or model roles)
+    const contents = messages.map(msg => {
+      const role = msg.role === 'assistant' || msg.role === 'model' ? 'model' : 'user';
+      const text = msg.content || msg.text || '';
+      return {
+        role,
+        parts: [{ text }]
+      };
+    });
+    
+    const payload = {
+      contents,
+      generationConfig: {
+        maxOutputTokens: maxTokens || 800,
+        temperature: 0.2
+      }
+    };
+    
+    if (systemPrompt) {
+      payload.systemInstruction = {
+        parts: [{ text: systemPrompt }]
+      };
+    }
+    
+    const apiURL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    
+    const response = await fetch(apiURL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('Gemini API request failed:', errorData);
+      return res.status(response.status).json({ 
+        error: errorData.error?.message || 'Gemini API request failed' 
+      });
+    }
+    
+    const data = await response.json();
+    const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    
+    res.json({ text: replyText });
+  } catch (error) {
+    console.error('AI route error:', error);
+    res.status(500).json({ error: 'Internal Server Error during AI generation' });
+  }
+});
 
 // Admin Authentication Routes
 
@@ -214,7 +289,7 @@ app.get('/api/admin/stats', authenticateAdmin, (req, res) => {
       totalAdmins,
       recentArticles: recentArticles.map(a => ({
         ...a,
-        tags: a.tags ? a.tags.split(',') : []
+        tags: parseTags(a.tags)
       })),
       topicStats
     });
@@ -345,7 +420,7 @@ app.get('/api/articles', (req, res) => {
     // Parse tags back to array
     const articlesWithTags = articles.map(a => ({
       ...a,
-      tags: a.tags ? a.tags.split(',') : []
+      tags: parseTags(a.tags)
     }));
 
     res.json(articlesWithTags);
@@ -365,7 +440,7 @@ app.get('/api/articles/:id', (req, res) => {
     }
 
     // Parse tags back to array
-    article.tags = article.tags ? article.tags.split(',') : [];
+    article.tags = parseTags(article.tags);
     
     res.json(article);
   } catch (error) {
@@ -406,7 +481,7 @@ app.post('/api/articles', authenticateAdmin, (req, res) => {
     db.articles.push(newArticle);
     saveDb();
 
-    newArticle.tags = newArticle.tags ? newArticle.tags.split(',') : [];
+    newArticle.tags = parseTags(newArticle.tags);
 
     res.status(201).json(newArticle);
   } catch (error) {
@@ -444,7 +519,7 @@ app.put('/api/articles/:id', authenticateAdmin, (req, res) => {
     saveDb();
 
     const updatedArticle = { ...db.articles[articleIndex] };
-    updatedArticle.tags = updatedArticle.tags ? updatedArticle.tags.split(',') : [];
+    updatedArticle.tags = parseTags(updatedArticle.tags);
 
     res.json(updatedArticle);
   } catch (error) {

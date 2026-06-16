@@ -4,9 +4,20 @@
   "description": "Digital Health Awareness System for Sierra Leone — aligned with SDG 3: Good Health & Well-being",
   "main": "server.js",
   "keywords": [
-    "health", "SDG3", "sierra-leone", "awareness", "malaria",
-    "maternal-health", "nutrition", "HIV", "vaccination", "krio",
-    "multilingual", "CRUD", "responsive", "open-source"
+    "health",
+    "SDG3",
+    "sierra-leone",
+    "awareness",
+    "malaria",
+    "maternal-health",
+    "nutrition",
+    "HIV",
+    "vaccination",
+    "krio",
+    "multilingual",
+    "CRUD",
+    "responsive",
+    "open-source"
   ],
   "author": "HealthPulse SL Contributors",
   "license": "MIT",
@@ -21,15 +32,16 @@
     "frontend": "npx serve . -l 8080"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
     "bcrypt": "^5.1.1",
-    "jsonwebtoken": "^9.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.5.0",
     "helmet": "^8.0.0",
-    "express-rate-limit": "^7.5.0"
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
-    "serve": "^14.0.0",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "serve": "^14.0.0"
   }
 }
